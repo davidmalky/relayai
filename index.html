@@ -3,711 +3,674 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RelayAI - Relationship Outreach</title>
+<title>Renzo - Relationships that remember</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bg:#0f1419;--bg2:#1a1f2e;--bg3:#252d3d;
-  --text:#e8eaed;--text2:#9aa0a6;
-  --accent:#4a9eff;--success:#34a853;--danger:#ea4335;--warning:#fbbc04;
-  --border:#3c4452;--tier-a:#c0392b;--tier-b:#2980b9;--tier-c:#7f8c8d;
-}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body{font-family:'Inter',system-ui,sans-serif;background:#F7F4EF;color:#1A1A1A;line-height:1.5}
 .hidden{display:none!important}
-a,button{cursor:pointer}
-
-/* Login */
-.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
-.login-box{background:var(--bg2);padding:40px;border-radius:12px;width:100%;max-width:380px;box-shadow:0 8px 32px rgba(0,0,0,.4)}
-.login-box h1{color:var(--accent);font-size:28px;margin-bottom:4px}
-.login-box p{color:var(--text2);margin-bottom:28px;font-size:14px}
-.api-banner{background:#2d1f00;border:1px solid var(--warning);border-radius:8px;padding:12px;margin-bottom:20px;font-size:13px;color:var(--warning)}
-.api-banner a{color:var(--accent)}
-
-/* Forms */
-.field{margin-bottom:16px}
-.field label{display:block;margin-bottom:6px;font-size:13px;font-weight:500;color:var(--text2)}
-.field input,.field select,.field textarea{width:100%;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:14px;outline:none;transition:border .2s}
-.field input:focus,.field select,.field textarea:focus{border-color:var(--accent)}
-.field textarea{resize:vertical;min-height:80px}
-.error-msg{color:var(--danger);font-size:12px;margin-top:4px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-
-/* Buttons */
-.btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 18px;border-radius:6px;font-size:14px;font-weight:500;border:none;transition:all .2s;gap:6px}
-.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:#3d8fe8}
-.btn-success{background:var(--success);color:#fff}.btn-success:hover{background:#2d9348}
-.btn-danger{background:var(--danger);color:#fff}.btn-danger:hover{background:#d32f2f}
-.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border)}.btn-ghost:hover{background:var(--bg3)}
-.btn-sm{padding:6px 12px;font-size:12px}
-.btn:disabled{opacity:.5;cursor:not-allowed}
-
-/* App layout */
-.app{display:flex;min-height:100vh}
-.sidebar{width:220px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
-.sidebar-header{padding:20px 16px;border-bottom:1px solid var(--border)}
-.sidebar-header h1{color:var(--accent);font-size:20px}
-.sidebar-header small{color:var(--text2);font-size:11px}
-nav{flex:1;padding:8px 0}
-.nav-item{display:flex;align-items:center;gap:10px;padding:10px 16px;color:var(--text2);font-size:14px;border:none;background:none;width:100%;text-align:left;transition:all .2s;border-left:3px solid transparent}
-.nav-item:hover{background:var(--bg3);color:var(--text)}
-.nav-item.active{color:var(--accent);border-left-color:var(--accent);background:rgba(74,158,255,.08)}
-.sidebar-footer{padding:16px;border-top:1px solid var(--border)}
-.main{flex:1;overflow-y:auto;background:var(--bg)}
-.view{padding:24px;max-width:1000px}
-.view-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
-.view-header h2{font-size:22px}
-
-/* Dashboard */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:28px}
-.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;text-align:center}
-.stat-card .num{font-size:36px;font-weight:700;margin-bottom:4px}
-.stat-card .lbl{color:var(--text2);font-size:13px}
-.stat-card.tier-a .num{color:var(--tier-a)}
-.stat-card.tier-b .num{color:var(--tier-b)}
-.stat-card.tier-c .num{color:var(--tier-c)}
-
-/* Activity */
-.section-title{font-size:15px;font-weight:600;margin-bottom:12px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
-.activity-list{list-style:none}
-.activity-item{padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;font-size:13px}
-.activity-item .act-name{font-weight:600;color:var(--accent)}
-.activity-item .act-time{color:var(--text2);font-size:11px;margin-top:2px}
-.empty-state{color:var(--text2);font-size:14px;text-align:center;padding:40px}
-
-/* Contacts table */
-.table-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.app-container{display:flex;height:100vh}
+.sidebar{width:240px;background:#1A1A1A;color:#F7F4EF;display:flex;flex-direction:column;padding:24px 0;flex-shrink:0}
+.sidebar-logo{font-size:24px;font-weight:700;color:#2D6A4F;padding:0 24px;margin-bottom:32px}
+.sidebar-nav{flex:1}
+.nav-item{padding:12px 24px;cursor:pointer;transition:background .2s;font-size:14px;border:none;background:none;color:#F7F4EF;width:100%;text-align:left;display:block}
+.nav-item:hover{background:rgba(255,255,255,.07)}
+.nav-item.active{background:#2D6A4F}
+.sidebar-footer{padding:16px 24px;border-top:1px solid rgba(255,255,255,.1);margin-top:auto}
+.user-name{font-size:13px;margin-bottom:8px;color:#9CA3AF}
+.logout-btn{background:transparent;border:1px solid rgba(255,255,255,.25);color:#F7F4EF;padding:8px 16px;border-radius:8px;cursor:pointer;width:100%;font-size:13px;font-family:inherit}
+.logout-btn:hover{background:rgba(255,255,255,.1)}
+.main-content{flex:1;overflow-y:auto;padding:32px}
+.login-container{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#F7F4EF}
+.login-card{background:#FFF;padding:48px;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.04);width:400px;text-align:center}
+.login-logo{font-size:32px;font-weight:700;color:#1A1A1A;margin-bottom:8px}
+.login-tagline{color:#6B7280;margin-bottom:32px;font-size:15px}
+.input-group{margin-bottom:16px;text-align:left}
+.input-group label{display:block;font-size:14px;font-weight:500;margin-bottom:4px;color:#374151}
+.input-group input,.input-group textarea,.input-group select{width:100%;padding:10px 12px;border:1px solid #E5E0D8;border-radius:8px;font-size:14px;font-family:inherit;background:#FFF;color:#1A1A1A}
+.input-group input:focus,.input-group textarea:focus,.input-group select:focus{outline:none;border-color:#2D6A4F;box-shadow:0 0 0 3px rgba(45,106,79,.1)}
+.input-group textarea{resize:vertical}
+.btn-primary{background:#2D6A4F;color:#FFF;padding:11px 20px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s}
+.btn-primary:hover{background:#245a40}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed}
+.btn-secondary{background:#6B7280;color:#FFF;padding:11px 20px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-ghost{background:transparent;color:#6B7280;padding:9px 16px;border:1px solid #E5E0D8;border-radius:8px;font-size:14px;cursor:pointer;font-family:inherit}
+.btn-ghost:hover{background:#F7F4EF;color:#1A1A1A}
+.btn-danger{background:#DC2626;color:#FFF;padding:9px 16px;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-family:inherit}
+.btn-danger:hover{background:#b91c1c}
+.btn-sm{padding:6px 12px;font-size:13px}
+.error-msg{color:#DC2626;font-size:14px;margin-top:6px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px}
+.modal-box{background:#FFF;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.18);max-width:620px;width:100%;max-height:90vh;overflow-y:auto;padding:32px}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.modal-title{font-size:20px;font-weight:700}
+.close-btn{background:none;border:none;font-size:24px;cursor:pointer;color:#9CA3AF;line-height:1;padding:4px 8px}
+.close-btn:hover{color:#1A1A1A}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;margin-bottom:28px}
+.stat-card{background:#FFF;padding:20px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.07)}
+.stat-label{font-size:12px;color:#9CA3AF;margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.stat-value{font-size:32px;font-weight:700}
+.section-title{font-size:17px;font-weight:700;margin-bottom:14px;color:#1A1A1A}
+.card-list{background:#FFF;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.07);overflow:hidden}
+.card-row{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid #F0EBE3;gap:12px}
+.card-row:last-child{border-bottom:none}
+.card-row:hover{background:#FAFAF8}
+.contact-name{font-weight:600;margin-bottom:2px;font-size:15px}
+.contact-sub{font-size:13px;color:#9CA3AF}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:.3px}
+.badge-a{background:#d1fae5;color:#065f46}
+.badge-b{background:#fef3c7;color:#92400e}
+.badge-c{background:#e2e8f0;color:#475569}
+.pill{display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:500}
+.pill-overdue{background:#fee2e2;color:#991b1b}
+.pill-due{background:#fef3c7;color:#92400e}
+.pill-ok{background:#d1fae5;color:#065f46}
+.toolbar{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
+.search-input{flex:1;min-width:160px;padding:9px 12px;border:1px solid #E5E0D8;border-radius:8px;font-size:14px;font-family:inherit;background:#FFF}
+.search-input:focus{outline:none;border-color:#2D6A4F}
+.tbl-wrap{background:#FFF;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.07);overflow-x:auto}
 table{width:100%;border-collapse:collapse}
-th{padding:12px 16px;text-align:left;font-size:12px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);background:var(--bg3)}
-td{padding:13px 16px;font-size:14px;border-bottom:1px solid var(--border)}
+th{text-align:left;padding:11px 14px;background:#F7F4EF;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:#6B7280;border-bottom:1px solid #E5E0D8;white-space:nowrap}
+td{padding:12px 14px;border-bottom:1px solid #F0EBE3;font-size:14px;vertical-align:middle}
 tr:last-child td{border-bottom:none}
-tr.clickable:hover td{background:var(--bg3);cursor:pointer}
-.tier-badge{display:inline-block;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:700;color:#fff}
-.tier-a-bg{background:var(--tier-a)}
-.tier-b-bg{background:var(--tier-b)}
-.tier-c-bg{background:var(--tier-c)}
-.overdue{color:var(--danger);font-weight:600}
-.due-soon{color:var(--warning)}
-.on-track{color:var(--success)}
-
-/* Search */
-.search-row{display:flex;gap:12px;margin-bottom:16px;align-items:center}
-.search-input{flex:1;padding:9px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:14px;outline:none}
-.search-input:focus{border-color:var(--accent)}
-
-/* Contact detail */
-.detail-header{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:20px}
-.detail-name{font-size:24px;font-weight:700;margin-bottom:4px}
-.detail-company{color:var(--text2);font-size:15px;margin-bottom:12px}
-.detail-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:16px}
-.meta-item label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:3px}
-.meta-item span{font-size:14px}
-.detail-actions{display:flex;gap:10px;margin-top:16px}
-
-/* Message section */
-.msg-section{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:20px}
-.msg-section h3{margin-bottom:16px;font-size:16px}
-.msg-box{width:100%;padding:14px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;line-height:1.6;min-height:140px;resize:vertical}
-.msg-actions{display:flex;gap:10px;margin-top:12px}
-.generating{color:var(--text2);font-size:14px;display:flex;align-items:center;gap:8px}
-.spinner{width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+tbody tr{cursor:pointer}
+tbody tr:hover td{background:#FAFAF8}
+.empty-state{text-align:center;padding:48px 24px;color:#9CA3AF;background:#FFF;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.07)}
+.empty-state strong{display:block;font-size:16px;color:#6B7280;margin-bottom:6px}
+.info-box{background:#ecfdf5;border-left:4px solid #2D6A4F;padding:14px 16px;border-radius:4px;margin-bottom:16px}
+.info-box-title{font-weight:600;color:#065f46;font-size:13px;margin-bottom:4px}
+.info-box p{font-size:14px;color:#065f46;line-height:1.5}
+.warning-banner{background:#fffbeb;border-left:4px solid #f59e0b;padding:12px 16px;border-radius:4px;margin-bottom:18px;font-size:14px;color:#92400e}
+.activity-row{padding:14px 16px;border-bottom:1px solid #F0EBE3}
+.activity-row:last-child{border-bottom:none}
+.activity-time{font-size:12px;color:#9CA3AF;margin-bottom:3px}
+.activity-who{font-weight:600;font-size:14px}
+.activity-msg{font-size:13px;color:#6B7280;margin-top:2px;line-height:1.4}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.view-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.queue-item{padding:18px 16px;border-bottom:1px solid #F0EBE3}
+.queue-item:last-child{border-bottom:none}
+.queue-who{font-weight:600;font-size:15px}
+.queue-co{font-size:13px;color:#9CA3AF;margin-bottom:8px}
+.queue-why{font-size:13px;color:#2D6A4F;font-style:italic;margin-bottom:6px;padding:8px 12px;background:#ecfdf5;border-radius:6px}
+.queue-msg{font-size:14px;color:#374151;line-height:1.5;margin-bottom:12px}
+.queue-actions{display:flex;gap:8px;flex-wrap:wrap}
+.success-text{color:#2D6A4F;font-size:14px;font-weight:500}
+.spinner{border:3px solid #E5E0D8;border-top:3px solid #2D6A4F;border-radius:50%;width:36px;height:36px;animation:spin .8s linear infinite;margin:0 auto 14px}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* Modal */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px}
-.modal{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:28px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
-.modal h3{margin-bottom:20px;font-size:18px}
-.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
-
-/* Responsive */
+.loading-box{text-align:center;padding:32px;color:#6B7280}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236B7280' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
 @media(max-width:640px){
-  .app{flex-direction:column}
-  .sidebar{width:100%;flex-direction:row;align-items:center}
-  nav{display:flex;flex-direction:row;overflow-x:auto}
-  .sidebar-footer{padding:8px}
+  .app-container{flex-direction:column;height:auto;min-height:100vh}
+  .sidebar{width:100%;flex-direction:row;padding:12px 8px;align-items:center;flex-wrap:wrap;height:auto}
+  .sidebar-logo{margin-bottom:0;padding:0 8px;font-size:18px}
+  .sidebar-nav{display:flex;flex-wrap:wrap}
+  .nav-item{padding:8px 10px;font-size:13px}
+  .sidebar-footer{display:none}
+  .main-content{padding:16px}
   .form-row{grid-template-columns:1fr}
+  .stat-grid{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
 <body>
 
 <!-- LOGIN -->
-<div id="loginView" class="login-wrap">
-  <div class="login-box">
-    <h1>RelayAI</h1>
-    <p>Intelligent relationship outreach</p>
-    <div id="apiBanner" class="api-banner hidden">
-      ⚠ No Anthropic API key set. AI message generation will be disabled.
-      Add your key in <strong>Settings</strong> after logging in.
+<div id="loginView" class="login-container">
+  <div class="login-card">
+    <div class="login-logo">Renzo</div>
+    <div class="login-tagline">Relationships that remember</div>
+    <div class="input-group">
+      <label for="lu">Username</label>
+      <input type="text" id="lu" autocomplete="username" placeholder="admin">
     </div>
-    <div class="field">
-      <label for="username">Username</label>
-      <input type="text" id="username" autocomplete="username" placeholder="Enter username">
+    <div class="input-group">
+      <label for="lp">Password</label>
+      <input type="password" id="lp" autocomplete="current-password" placeholder="••••••••">
     </div>
-    <div class="field">
-      <label for="password">Password</label>
-      <input type="password" id="password" autocomplete="current-password" placeholder="Enter password">
-      <div class="error-msg hidden" id="loginError">Invalid username or password</div>
+    <div id="loginErr" class="error-msg hidden">Incorrect username or password.</div>
+    <button class="btn-primary" id="loginBtn" style="width:100%;margin-top:8px">Log In</button>
+  </div>
+</div>
+
+<!-- ONBOARDING -->
+<div id="obModal" class="modal-overlay hidden">
+  <div class="modal-box" style="max-width:500px">
+    <div class="modal-header">
+      <h2 class="modal-title">Set up your profile</h2>
+      <button class="close-btn" id="obSkip">×</button>
     </div>
-    <button class="btn btn-primary" style="width:100%" onclick="doLogin()">Login</button>
+    <p style="color:#6B7280;font-size:14px;margin-bottom:20px">Help Renzo write messages that sound like you.</p>
+    <div class="input-group"><label>Company Name</label><input type="text" id="obCo" placeholder="Prime Source"></div>
+    <div class="input-group"><label>What you sell</label><textarea id="obSell" rows="2" placeholder="Describe your products or services..."></textarea></div>
+    <div class="input-group"><label>Typical customer</label><textarea id="obCust" rows="2" placeholder="Who are they and what do they care about?"></textarea></div>
+    <div class="form-row">
+      <div class="input-group"><label>Tone</label><select id="obTone"><option>Professional</option><option>Conversational</option><option>Direct</option><option>Warm</option></select></div>
+      <div class="input-group"><label>Your name</label><input type="text" id="obRep" placeholder="David"></div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+      <button class="btn-ghost" id="obSkip2">Skip</button>
+      <button class="btn-primary" id="obSave" style="width:auto">Save & Start</button>
+    </div>
   </div>
 </div>
 
 <!-- APP -->
-<div id="appView" class="app hidden">
-  <div class="sidebar">
-    <div class="sidebar-header">
-      <h1>RelayAI</h1>
-      <small id="userLabel">Logged in as admin</small>
-    </div>
-    <nav>
-      <button class="nav-item active" onclick="showView('dashboard')" id="nav-dashboard">Dashboard</button>
-      <button class="nav-item" onclick="showView('contacts')" id="nav-contacts">Contacts</button>
-      <button class="nav-item" onclick="showView('add')" id="nav-add">+ Add Contact</button>
-      <button class="nav-item" onclick="showView('settings')" id="nav-settings">Settings</button>
+<div id="appView" class="app-container hidden">
+  <aside class="sidebar">
+    <div class="sidebar-logo">Renzo</div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-view="dashboard">Dashboard</button>
+      <button class="nav-item" data-view="contacts">Contacts</button>
+      <button class="nav-item" data-view="queue">Outreach Queue</button>
+      <button class="nav-item" data-view="drafts">Drafts</button>
+      <button class="nav-item" data-view="settings">Settings</button>
     </nav>
     <div class="sidebar-footer">
-      <button class="btn btn-ghost btn-sm" style="width:100%" onclick="doLogout()">Logout</button>
+      <div class="user-name" id="sidebarUser"></div>
+      <button class="logout-btn" id="logoutBtn">Logout</button>
     </div>
-  </div>
+  </aside>
 
-  <div class="main">
+  <main class="main-content">
     <!-- DASHBOARD -->
-    <div id="view-dashboard" class="view">
-      <div class="view-header">
-        <h2>Dashboard</h2>
-        <span id="dashDate" style="color:var(--text2);font-size:13px"></span>
+    <div id="view-dashboard">
+      <div style="margin-bottom:24px">
+        <div style="font-size:26px;font-weight:700" id="greeting"></div>
+        <div style="color:#9CA3AF;font-size:14px;margin-top:2px" id="todayDate"></div>
       </div>
-      <div class="stats-grid">
-        <div class="stat-card"><div class="num" id="statTotal">0</div><div class="lbl">Total Contacts</div></div>
-        <div class="stat-card tier-a"><div class="num" id="statA">0</div><div class="lbl">Tier A Overdue</div></div>
-        <div class="stat-card tier-b"><div class="num" id="statB">0</div><div class="lbl">Tier B Overdue</div></div>
-        <div class="stat-card tier-c"><div class="num" id="statC">0</div><div class="lbl">Tier C Overdue</div></div>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-label">Total Contacts</div><div class="stat-value" id="sTotal">0</div></div>
+        <div class="stat-card"><div class="stat-label">Due Today</div><div class="stat-value" id="sDue">0</div></div>
+        <div class="stat-card"><div class="stat-label">Overdue</div><div class="stat-value" id="sOverdue">0</div></div>
+        <div class="stat-card"><div class="stat-label">Sent This Week</div><div class="stat-value" id="sSent">0</div></div>
       </div>
-      <div class="section-title">Recent Activity</div>
-      <ul class="activity-list" id="recentActivity"></ul>
+      <div class="section-title">Due for Outreach</div>
+      <div id="dueList"></div>
+      <div class="section-title" style="margin-top:28px">Recent Activity</div>
+      <div id="actList"></div>
     </div>
 
     <!-- CONTACTS -->
-    <div id="view-contacts" class="view hidden">
+    <div id="view-contacts" class="hidden">
       <div class="view-header">
-        <h2>All Contacts</h2>
-        <button class="btn btn-primary" onclick="showView('add')">+ Add Contact</button>
+        <h1 class="section-title" style="margin:0">Contacts</h1>
+        <button class="btn-primary" id="addBtn" style="width:auto">+ Add Contact</button>
       </div>
-      <div class="search-row">
-        <input class="search-input" id="searchInput" placeholder="Search by name or company..." oninput="renderContacts()">
-        <select id="filterTier" onchange="renderContacts()" style="padding:9px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:14px">
-          <option value="">All Tiers</option>
-          <option value="A">Tier A</option>
-          <option value="B">Tier B</option>
-          <option value="C">Tier C</option>
+      <div class="toolbar">
+        <input class="search-input" id="searchQ" placeholder="Search name or company...">
+        <select id="tierF" style="padding:9px 28px 9px 10px;border:1px solid #E5E0D8;border-radius:8px;font-size:14px;background:#FFF;font-family:inherit">
+          <option value="">All Tiers</option><option value="A">Tier A</option><option value="B">Tier B</option><option value="C">Tier C</option>
+        </select>
+        <select id="statF" style="padding:9px 28px 9px 10px;border:1px solid #E5E0D8;border-radius:8px;font-size:14px;background:#FFF;font-family:inherit">
+          <option value="">All Statuses</option><option value="overdue">Overdue</option><option value="due">Due Soon</option><option value="ok">On Track</option>
         </select>
       </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr>
-            <th>Name</th><th>Company</th><th>Tier</th><th>Last Contact</th><th>Status</th>
-          </tr></thead>
-          <tbody id="contactsBody"></tbody>
-        </table>
+      <div class="tbl-wrap">
+        <table><thead><tr><th>Name</th><th>Company</th><th>Tier</th><th>Last Contact</th><th>Next Due</th><th>Status</th><th></th></tr></thead>
+        <tbody id="ctBody"></tbody></table>
       </div>
+      <div id="ctEmpty" class="empty-state hidden"><strong>No contacts yet</strong>Add your first contact to get started.</div>
     </div>
 
-    <!-- ADD / EDIT CONTACT -->
-    <div id="view-add" class="view hidden">
+    <!-- QUEUE -->
+    <div id="view-queue" class="hidden">
       <div class="view-header">
-        <h2 id="formTitle">Add Contact</h2>
-        <button class="btn btn-ghost" onclick="showView('contacts')">Cancel</button>
+        <h1 class="section-title" style="margin:0">Outreach Queue</h1>
+        <button class="btn-primary" id="markAllBtn" style="width:auto">Mark All Sent</button>
       </div>
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:24px;max-width:600px">
-        <input type="hidden" id="editId">
-        <div class="form-row">
-          <div class="field"><label>First & Last Name *</label><input type="text" id="fName" placeholder="John Smith"></div>
-          <div class="field"><label>Company *</label><input type="text" id="fCompany" placeholder="Acme Corp"></div>
-        </div>
-        <div class="form-row">
-          <div class="field"><label>Email</label><input type="email" id="fEmail" placeholder="john@acme.com"></div>
-          <div class="field"><label>Phone</label><input type="tel" id="fPhone" placeholder="(555) 123-4567"></div>
-        </div>
-        <div class="form-row">
-          <div class="field">
-            <label>Tier *</label>
-            <select id="fTier" onchange="setDefaultFrequency()">
-              <option value="">Select tier...</option>
-              <option value="A">A — High Value (weekly)</option>
-              <option value="B">B — Mid Value (monthly)</option>
-              <option value="C">C — Low Value (quarterly)</option>
-            </select>
-          </div>
-          <div class="field"><label>Touch Frequency (days) *</label><input type="number" id="fFreq" min="1" max="365" placeholder="30"></div>
-        </div>
-        <div class="field"><label>Last Contact Date</label><input type="date" id="fLastContact"></div>
-        <div class="field"><label>Notes (used for AI message personalization)</label><textarea id="fNotes" placeholder="Key talking points, relationship history, interests, recent wins..."></textarea></div>
-        <div style="display:flex;gap:10px;margin-top:8px">
-          <button class="btn btn-primary" onclick="saveContact()">Save Contact</button>
-          <button class="btn btn-ghost" onclick="showView('contacts')">Cancel</button>
-        </div>
-      </div>
+      <div id="queueList" class="card-list"></div>
+      <div id="queueEmpty" class="empty-state hidden"><strong>Queue is clear</strong>Generate messages from contacts to fill the queue.</div>
     </div>
 
-    <!-- CONTACT DETAIL -->
-    <div id="view-detail" class="view hidden">
-      <div class="view-header">
-        <h2>Contact Details</h2>
-        <button class="btn btn-ghost" onclick="showView('contacts')">← Back</button>
-      </div>
-      <div class="detail-header">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
-          <div>
-            <div class="detail-name" id="dName"></div>
-            <div class="detail-company" id="dCompany"></div>
-            <span class="tier-badge" id="dTier"></span>
-          </div>
-          <div class="detail-actions">
-            <button class="btn btn-ghost btn-sm" onclick="editCurrent()">Edit</button>
-            <button class="btn btn-danger btn-sm" onclick="deleteCurrent()">Delete</button>
-          </div>
-        </div>
-        <div class="detail-meta">
-          <div class="meta-item"><label>Email</label><span id="dEmail">—</span></div>
-          <div class="meta-item"><label>Phone</label><span id="dPhone">—</span></div>
-          <div class="meta-item"><label>Touch Frequency</label><span id="dFreq"></span></div>
-          <div class="meta-item"><label>Last Contact</label><span id="dLast"></span></div>
-          <div class="meta-item"><label>Status</label><span id="dStatus"></span></div>
-        </div>
-        <div style="margin-top:16px" id="dNotesWrap">
-          <div class="meta-item"><label>Notes</label><span id="dNotes"></span></div>
-        </div>
-      </div>
-
-      <!-- Message Generation -->
-      <div class="msg-section">
-        <h3>AI Outreach Message</h3>
-        <div id="msgIdle">
-          <button class="btn btn-primary" onclick="generateMessage()">Generate Personalized Message</button>
-        </div>
-        <div id="msgGenerating" class="generating hidden">
-          <div class="spinner"></div> Generating personalized message...
-        </div>
-        <div id="msgReady" class="hidden">
-          <textarea class="msg-box" id="msgText"></textarea>
-          <div class="msg-actions">
-            <button class="btn btn-success" onclick="approveMessage()">Approve & Log</button>
-            <button class="btn btn-ghost" onclick="regenerateMessage()">Regenerate</button>
-            <button class="btn btn-ghost" onclick="cancelMessage()">Cancel</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Activity Log -->
-      <div>
-        <div class="section-title">Activity Log</div>
-        <ul class="activity-list" id="contactActivity"></ul>
-      </div>
+    <!-- DRAFTS -->
+    <div id="view-drafts" class="hidden">
+      <div class="view-header"><h1 class="section-title" style="margin:0">Drafts</h1></div>
+      <div id="draftList" class="card-list"></div>
+      <div id="draftEmpty" class="empty-state hidden"><strong>No drafts</strong>Skipped messages will appear here.</div>
     </div>
 
     <!-- SETTINGS -->
-    <div id="view-settings" class="view hidden">
-      <div class="view-header"><h2>Settings</h2></div>
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:24px;max-width:500px">
-        <div class="field">
+    <div id="view-settings" class="hidden">
+      <h1 class="section-title">Settings</h1>
+      <div id="apiWarn" class="warning-banner hidden">⚠ Add your Anthropic API key to enable AI message generation.</div>
+      <div class="tbl-wrap" style="padding:24px;max-width:560px">
+        <div class="input-group">
           <label>Anthropic API Key</label>
-          <input type="password" id="settingsApiKey" placeholder="sk-ant-...">
-          <div style="font-size:12px;color:var(--text2);margin-top:6px">Required for AI message generation. Get yours at <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent)">console.anthropic.com</a></div>
+          <input type="password" id="apiIn" placeholder="sk-ant-...">
+          <div style="font-size:12px;color:#9CA3AF;margin-top:4px">Get yours at <a href="https://console.anthropic.com" target="_blank" style="color:#2D6A4F">console.anthropic.com</a></div>
         </div>
-        <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
-        <div id="settingsSaved" class="hidden" style="color:var(--success);font-size:13px;margin-top:10px">✓ Settings saved</div>
+        <h3 style="margin:22px 0 14px;font-size:15px;font-weight:600">Company Profile</h3>
+        <div class="input-group"><label>Company Name</label><input type="text" id="sCo"></div>
+        <div class="input-group"><label>What you sell</label><textarea id="sSell" rows="2"></textarea></div>
+        <div class="input-group"><label>Typical customer</label><textarea id="sCust" rows="2"></textarea></div>
+        <div class="form-row">
+          <div class="input-group"><label>Tone</label><select id="sTone"><option>Professional</option><option>Conversational</option><option>Direct</option><option>Warm</option></select></div>
+          <div class="input-group"><label>Your name</label><input type="text" id="sRep"></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;margin-top:8px">
+          <button class="btn-primary" id="saveSetBtn" style="width:auto">Save Settings</button>
+          <span id="saveOk" class="success-text hidden">✓ Saved</span>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- CONTACT FORM -->
+<div id="ctModal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 class="modal-title" id="ctModalTitle">Add Contact</h2>
+      <button class="close-btn" id="ctClose">×</button>
+    </div>
+    <input type="hidden" id="ctId">
+    <div class="form-row">
+      <div class="input-group"><label>Full Name *</label><input type="text" id="ctName" placeholder="Jane Smith"></div>
+      <div class="input-group"><label>Company *</label><input type="text" id="ctCo" placeholder="Acme Corp"></div>
+    </div>
+    <div class="form-row">
+      <div class="input-group"><label>Title</label><input type="text" id="ctTitle" placeholder="VP of Operations"></div>
+      <div class="input-group"><label>Email</label><input type="email" id="ctEmail"></div>
+    </div>
+    <div class="form-row">
+      <div class="input-group"><label>Phone</label><input type="tel" id="ctPhone"></div>
+      <div class="input-group"><label>Tier *</label>
+        <select id="ctTier" onchange="autoFreq()">
+          <option value="">Select...</option>
+          <option value="A">A — High Value (weekly)</option>
+          <option value="B">B — Mid Value (monthly)</option>
+          <option value="C">C — Lower Value (quarterly)</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="input-group"><label>Touch Frequency (days) *</label><input type="number" id="ctFreq" min="1" placeholder="30"></div>
+      <div class="input-group"><label>Last Contact Date</label><input type="date" id="ctLast"></div>
+    </div>
+    <div class="form-row">
+      <div class="input-group"><label>Location/Region</label><input type="text" id="ctLoc" placeholder="New Jersey"></div>
+      <div class="input-group"><label>Account Size</label>
+        <select id="ctSize"><option value="">Select...</option><option>Small</option><option>Mid-Market</option><option>Large</option><option>Enterprise</option></select>
+      </div>
+    </div>
+    <div class="input-group"><label>Products/Services They Use</label><textarea id="ctProds" rows="2" placeholder="What do they buy or use from you?"></textarea></div>
+    <div class="input-group"><label>Relationship History</label><textarea id="ctHist" rows="4" placeholder="Past conversations, key topics discussed, who has spoken to them, what was agreed..."></textarea></div>
+    <div class="input-group"><label>Notes</label><textarea id="ctNotes" rows="2" placeholder="Anything else relevant..."></textarea></div>
+    <div id="ctErr" class="error-msg hidden">Please fill in all required fields (Name, Company, Tier, Frequency).</div>
+    <div style="display:flex;gap:10px;justify-content:space-between;align-items:center;margin-top:8px;flex-wrap:wrap">
+      <button class="btn-danger btn-sm hidden" id="ctDeleteBtn">Delete Contact</button>
+      <div style="display:flex;gap:10px">
+        <button class="btn-ghost" id="ctCancel">Cancel</button>
+        <button class="btn-primary" id="ctSave" style="width:auto">Save Contact</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- DELETE CONFIRM MODAL -->
-<div id="deleteModal" class="modal-overlay hidden">
-  <div class="modal">
-    <h3>Delete Contact?</h3>
-    <p style="color:var(--text2);font-size:14px">This will permanently delete <strong id="deleteModalName"></strong> and all their activity. This cannot be undone.</p>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeDeleteModal()">Cancel</button>
-      <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+<!-- AI MODAL -->
+<div id="aiModal" class="modal-overlay hidden">
+  <div class="modal-box" style="max-width:560px">
+    <div class="modal-header">
+      <h2 class="modal-title" id="aiModalTitle">Generate Message</h2>
+      <button class="close-btn" id="aiClose">×</button>
+    </div>
+    <div id="aiLoad" class="loading-box"><div class="spinner"></div><p>Analyzing relationship context...</p></div>
+    <div id="aiResult" class="hidden">
+      <div class="info-box"><div class="info-box-title">Why this message</div><p id="aiReason"></p></div>
+      <div class="input-group"><label>Message (edit freely)</label><textarea id="aiMsg" rows="7"></textarea></div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:8px">
+        <button class="btn-ghost" id="aiDraft">Save as Draft</button>
+        <button class="btn-ghost" id="aiRegen">Regenerate</button>
+        <button class="btn-primary" id="aiQueue" style="width:auto">Add to Queue</button>
+      </div>
+    </div>
+    <div id="aiErr" class="hidden" style="color:#DC2626;font-size:14px;padding:8px 0"></div>
+  </div>
+</div>
+
+<!-- DELETE CONFIRM -->
+<div id="delModal" class="modal-overlay hidden">
+  <div class="modal-box" style="max-width:380px">
+    <h3 style="margin-bottom:10px;font-size:18px">Delete Contact?</h3>
+    <p style="color:#6B7280;font-size:14px;margin-bottom:20px">This will permanently delete <strong id="delName"></strong> and all their activity. Cannot be undone.</p>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button class="btn-ghost" id="delCancel">Cancel</button>
+      <button class="btn-danger" id="delConfirm">Delete</button>
     </div>
   </div>
 </div>
 
 <script>
-// ── State ──────────────────────────────────────────────────────────────────
-const CREDENTIALS = { admin: 'relayai2024' };
-let currentUser = null;
-let currentContactId = null;
-let contacts = [];
-let activity = [];
-let ANTHROPIC_API_KEY = '';
+// ── Config ──────────────────────────────────────────────────────────────────
+const CREDS  = { admin: 'renzo2024' };
+const K = { contacts:'renzo_contacts', activity:'renzo_activity', queue:'renzo_queue', drafts:'renzo_drafts', profile:'renzo_profile', apiKey:'renzo_api_key', session:'renzo_session', onboarded:'renzo_onboarded' };
+let apiKey = '', currentUser = null, aiContact = null, pendingDelete = null;
 
-// ── Storage ────────────────────────────────────────────────────────────────
-function save() {
-  localStorage.setItem('relayai_contacts', JSON.stringify(contacts));
-  localStorage.setItem('relayai_activity', JSON.stringify(activity));
+// ── Storage ─────────────────────────────────────────────────────────────────
+const g  = k => { try { return JSON.parse(localStorage.getItem(k)||'null'); } catch(e) { return null; } };
+const s  = (k,v) => localStorage.setItem(k, JSON.stringify(v));
+const gc = () => g(K.contacts)||[];
+const ga = () => g(K.activity)||[];
+const gq = () => g(K.queue)||[];
+const gd = () => g(K.drafts)||[];
+const gp = () => g(K.profile)||{};
+const id = () => Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const esc = t => String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+// ── Contact helpers ─────────────────────────────────────────────────────────
+function daysOver(c) {
+  if (!c.lastContact) return c.frequency||30;
+  return Math.floor((Date.now()-new Date(c.lastContact))/86400000)-(c.frequency||30);
+}
+function status(c) {
+  const d=daysOver(c);
+  return d>0?{lbl:d+'d overdue',cls:'overdue'}:d>-7?{lbl:'Due soon',cls:'due'}:{lbl:'On track',cls:'ok'};
+}
+function tbadge(t) { return `<span class="badge badge-${(t||'c').toLowerCase()}">Tier ${esc(t||'?')}</span>`; }
+function spill(c)  { const s=status(c); return `<span class="pill pill-${s.cls}">${s.lbl}</span>`; }
+function nextDue(c) {
+  if (!c.lastContact) return 'Never contacted';
+  const d=new Date(c.lastContact); d.setDate(d.getDate()+(c.frequency||30)); return d.toLocaleDateString();
 }
 
-function load() {
-  try { contacts = JSON.parse(localStorage.getItem('relayai_contacts') || '[]'); } catch(e) { contacts = []; }
-  try { activity = JSON.parse(localStorage.getItem('relayai_activity') || '[]'); } catch(e) { activity = []; }
-  ANTHROPIC_API_KEY = localStorage.getItem('relayai_api_key') || '';
-}
-
-function genId() {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-}
-
-// ── Auth ───────────────────────────────────────────────────────────────────
-function doLogin() {
-  const u = document.getElementById('username').value.trim();
-  const p = document.getElementById('password').value;
-  const err = document.getElementById('loginError');
-  if (CREDENTIALS[u] && CREDENTIALS[u] === p) {
-    currentUser = u;
-    err.classList.add('hidden');
+// ── Auth ────────────────────────────────────────────────────────────────────
+function login() {
+  const u=document.getElementById('lu').value.trim(), p=document.getElementById('lp').value;
+  const err=document.getElementById('loginErr');
+  if (CREDS[u]&&CREDS[u]===p) {
+    err.classList.add('hidden'); currentUser=u; s(K.session,u);
+    apiKey=localStorage.getItem(K.apiKey)||'';
     document.getElementById('loginView').classList.add('hidden');
     document.getElementById('appView').classList.remove('hidden');
-    document.getElementById('userLabel').textContent = 'Logged in as ' + u;
-    if (!ANTHROPIC_API_KEY) document.getElementById('apiBanner').classList.remove('hidden');
-    load();
-    showView('dashboard');
-  } else {
-    err.classList.remove('hidden');
-  }
+    document.getElementById('sidebarUser').textContent=u;
+    g(K.onboarded)?showView('dashboard'):document.getElementById('obModal').classList.remove('hidden');
+  } else { err.classList.remove('hidden'); }
 }
 
-function doLogout() {
-  currentUser = null;
+function logout() {
+  localStorage.removeItem(K.session); currentUser=null;
   document.getElementById('appView').classList.add('hidden');
   document.getElementById('loginView').classList.remove('hidden');
-  document.getElementById('username').value = '';
-  document.getElementById('password').value = '';
+  document.getElementById('lu').value=''; document.getElementById('lp').value='';
 }
 
-// Allow Enter key on login
-document.getElementById('password').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-document.getElementById('username').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+// ── Onboarding ──────────────────────────────────────────────────────────────
+function saveOb() {
+  s(K.profile,{company:document.getElementById('obCo').value.trim(),sell:document.getElementById('obSell').value.trim(),customer:document.getElementById('obCust').value.trim(),tone:document.getElementById('obTone').value,repName:document.getElementById('obRep').value.trim()});
+  s(K.onboarded,true); document.getElementById('obModal').classList.add('hidden'); showView('dashboard');
+}
+function skipOb() { s(K.onboarded,true); document.getElementById('obModal').classList.add('hidden'); showView('dashboard'); }
 
-// ── Navigation ─────────────────────────────────────────────────────────────
+// ── Navigation ──────────────────────────────────────────────────────────────
 function showView(name) {
-  document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  const view = document.getElementById('view-' + name);
-  if (view) view.classList.remove('hidden');
-  const nav = document.getElementById('nav-' + name);
-  if (nav) nav.classList.add('active');
-  if (name === 'dashboard') renderDashboard();
-  if (name === 'contacts') renderContacts();
-  if (name === 'add') openAddForm();
-  if (name === 'settings') loadSettings();
+  ['dashboard','contacts','queue','drafts','settings'].forEach(v=>document.getElementById('view-'+v).classList.add('hidden'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('view-'+name).classList.remove('hidden');
+  document.querySelector(`[data-view="${name}"]`)?.classList.add('active');
+  if(name==='dashboard') renderDash();
+  if(name==='contacts')  renderContacts();
+  if(name==='queue')     renderQueue();
+  if(name==='drafts')    renderDrafts();
+  if(name==='settings')  loadSettings();
 }
 
-// ── Contacts ───────────────────────────────────────────────────────────────
-function daysOverdue(c) {
-  if (!c.lastContact) return c.frequency;
-  const last = new Date(c.lastContact);
-  const now  = new Date();
-  const diff = Math.floor((now - last) / 86400000);
-  return diff - c.frequency;
+// ── Dashboard ───────────────────────────────────────────────────────────────
+function renderDash() {
+  const h=new Date().getHours(), p=gp(), contacts=gc(), activity=ga();
+  const greet=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+  document.getElementById('greeting').textContent=`${greet}, ${p.repName||'there'}`;
+  document.getElementById('todayDate').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const wk=new Date(Date.now()-7*86400000);
+  document.getElementById('sTotal').textContent=contacts.length;
+  document.getElementById('sDue').textContent=contacts.filter(c=>{const d=daysOver(c);return d>-3&&d<=0;}).length;
+  document.getElementById('sOverdue').textContent=contacts.filter(c=>daysOver(c)>0).length;
+  document.getElementById('sSent').textContent=activity.filter(a=>new Date(a.ts)>wk).length;
+
+  const due=contacts.filter(c=>daysOver(c)>-3).sort((a,b)=>daysOver(b)-daysOver(a)).slice(0,10);
+  const dueEl=document.getElementById('dueList');
+  dueEl.innerHTML=due.length?'<div class="card-list">'+due.map(c=>`<div class="card-row"><div style="flex:1"><div class="contact-name">${esc(c.name)} ${tbadge(c.tier)}</div><div class="contact-sub">${esc(c.company)} · ${spill(c)}</div></div><button class="btn-primary btn-sm" onclick="openAi('${c.id}')">Generate Message</button></div>`).join('')+'</div>':'<div class="empty-state"><strong>All caught up!</strong>No contacts due right now.</div>';
+
+  const acts=[...activity].reverse().slice(0,8);
+  const actEl=document.getElementById('actList');
+  actEl.innerHTML=acts.length?'<div class="card-list">'+acts.map(a=>`<div class="activity-row"><div class="activity-time">${new Date(a.ts).toLocaleString()}</div><div class="activity-who">${esc(a.cName)} — ${esc(a.co||'')}</div><div class="activity-msg">${esc(a.msg.slice(0,100))}${a.msg.length>100?'…':''}</div></div>`).join('')+'</div>':'<div class="empty-state"><strong>No activity yet</strong>Start reaching out to contacts.</div>';
 }
 
-function statusLabel(c) {
-  const d = daysOverdue(c);
-  if (d > 0)  return { text: d + 'd overdue', cls: 'overdue' };
-  if (d > -7) return { text: 'Due soon', cls: 'due-soon' };
-  return { text: 'On track', cls: 'on-track' };
-}
-
-function tierClass(t) {
-  return t === 'A' ? 'tier-a-bg' : t === 'B' ? 'tier-b-bg' : 'tier-c-bg';
-}
-
+// ── Contacts ─────────────────────────────────────────────────────────────────
 function renderContacts() {
-  const q    = (document.getElementById('searchInput')?.value || '').toLowerCase();
-  const tier = document.getElementById('filterTier')?.value || '';
-  const body = document.getElementById('contactsBody');
-  const list = contacts.filter(c =>
-    (!q || c.name.toLowerCase().includes(q) || c.company.toLowerCase().includes(q)) &&
-    (!tier || c.tier === tier)
-  ).sort((a, b) => daysOverdue(b) - daysOverdue(a));
-
-  if (!list.length) {
-    body.innerHTML = '<tr><td colspan="5"><div class="empty-state">No contacts yet. Add your first contact!</div></td></tr>';
-    return;
-  }
-  body.innerHTML = list.map(c => {
-    const s = statusLabel(c);
-    return `<tr class="clickable" onclick="openContact('${c.id}')">
-      <td><strong>${esc(c.name)}</strong></td>
-      <td>${esc(c.company)}</td>
-      <td><span class="tier-badge ${tierClass(c.tier)}">${c.tier}</span></td>
-      <td>${c.lastContact ? new Date(c.lastContact).toLocaleDateString() : 'Never'}</td>
-      <td><span class="${s.cls}">${s.text}</span></td>
-    </tr>`;
-  }).join('');
+  const q=document.getElementById('searchQ').value.toLowerCase(), tf=document.getElementById('tierF').value, sf=document.getElementById('statF').value;
+  let list=gc().filter(c=>{
+    if(q&&!c.name.toLowerCase().includes(q)&&!c.company.toLowerCase().includes(q))return false;
+    if(tf&&c.tier!==tf)return false;
+    if(sf){const d=daysOver(c);if(sf==='overdue'&&d<=0)return false;if(sf==='due'&&(d>0||d<=-7))return false;if(sf==='ok'&&d>-7)return false;}
+    return true;
+  }).sort((a,b)=>daysOver(b)-daysOver(a));
+  const body=document.getElementById('ctBody'), empty=document.getElementById('ctEmpty');
+  if(!list.length){body.innerHTML='';empty.classList.remove('hidden');return;}
+  empty.classList.add('hidden');
+  body.innerHTML=list.map(c=>`<tr onclick="openEdit('${c.id}')"><td><strong>${esc(c.name)}</strong></td><td>${esc(c.company)}</td><td>${tbadge(c.tier)}</td><td>${c.lastContact?new Date(c.lastContact).toLocaleDateString():'Never'}</td><td>${nextDue(c)}</td><td>${spill(c)}</td><td onclick="event.stopPropagation()"><button class="btn-ghost btn-sm" onclick="openAi('${c.id}')">Message</button></td></tr>`).join('');
 }
 
-function renderDashboard() {
-  document.getElementById('dashDate').textContent = new Date().toLocaleDateString('en-US', {weekday:'long',month:'long',day:'numeric'});
-  document.getElementById('statTotal').textContent = contacts.length;
-
-  const overdue = t => contacts.filter(c => c.tier === t && daysOverdue(c) > 0).length;
-  document.getElementById('statA').textContent = overdue('A');
-  document.getElementById('statB').textContent = overdue('B');
-  document.getElementById('statC').textContent = overdue('C');
-
-  const ul = document.getElementById('recentActivity');
-  const recent = [...activity].reverse().slice(0, 10);
-  if (!recent.length) {
-    ul.innerHTML = '<li class="empty-state">No activity yet. Start reaching out to contacts!</li>';
-    return;
-  }
-  ul.innerHTML = recent.map(a => `
-    <li class="activity-item">
-      <span class="act-name">${esc(a.contactName)}</span> — ${esc(a.message.slice(0, 80))}${a.message.length > 80 ? '…' : ''}
-      <div class="act-time">${new Date(a.timestamp).toLocaleString()}</div>
-    </li>`).join('');
+// ── Contact Form ─────────────────────────────────────────────────────────────
+function clearForm() {
+  ['ctName','ctCo','ctTitle','ctEmail','ctPhone','ctLoc','ctProds','ctHist','ctNotes'].forEach(x=>document.getElementById(x).value='');
+  document.getElementById('ctTier').value=''; document.getElementById('ctFreq').value='';
+  document.getElementById('ctSize').value=''; document.getElementById('ctLast').value='';
+  document.getElementById('ctId').value=''; document.getElementById('ctErr').classList.add('hidden');
 }
 
-// ── Add / Edit ─────────────────────────────────────────────────────────────
-function openAddForm(id) {
-  document.getElementById('formTitle').textContent = id ? 'Edit Contact' : 'Add Contact';
-  document.getElementById('editId').value = id || '';
-  if (id) {
-    const c = contacts.find(x => x.id === id);
-    if (!c) return;
-    document.getElementById('fName').value       = c.name;
-    document.getElementById('fCompany').value    = c.company;
-    document.getElementById('fEmail').value      = c.email || '';
-    document.getElementById('fPhone').value      = c.phone || '';
-    document.getElementById('fTier').value       = c.tier;
-    document.getElementById('fFreq').value       = c.frequency;
-    document.getElementById('fLastContact').value = c.lastContact || '';
-    document.getElementById('fNotes').value      = c.notes || '';
-  } else {
-    ['fName','fCompany','fEmail','fPhone','fNotes','fLastContact'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('fTier').value = '';
-    document.getElementById('fFreq').value = '';
-  }
+function openAdd() {
+  clearForm(); document.getElementById('ctModalTitle').textContent='Add Contact';
+  document.getElementById('ctDeleteBtn').classList.add('hidden');
+  document.getElementById('ctModal').classList.remove('hidden');
 }
 
-function setDefaultFrequency() {
-  const t = document.getElementById('fTier').value;
-  const freq = document.getElementById('fFreq');
-  if (!freq.value) freq.value = t === 'A' ? 7 : t === 'B' ? 30 : t === 'C' ? 90 : '';
+function openEdit(cid) {
+  const c=gc().find(x=>x.id===cid); if(!c)return;
+  clearForm(); document.getElementById('ctModalTitle').textContent='Edit Contact';
+  document.getElementById('ctId').value=cid;
+  document.getElementById('ctName').value=c.name||''; document.getElementById('ctCo').value=c.company||'';
+  document.getElementById('ctTitle').value=c.title||''; document.getElementById('ctEmail').value=c.email||'';
+  document.getElementById('ctPhone').value=c.phone||''; document.getElementById('ctTier').value=c.tier||'';
+  document.getElementById('ctFreq').value=c.frequency||''; document.getElementById('ctLast').value=c.lastContact||'';
+  document.getElementById('ctLoc').value=c.location||''; document.getElementById('ctSize').value=c.accountSize||'';
+  document.getElementById('ctProds').value=c.products||''; document.getElementById('ctHist').value=c.history||'';
+  document.getElementById('ctNotes').value=c.notes||'';
+  document.getElementById('ctDeleteBtn').classList.remove('hidden');
+  document.getElementById('ctModal').classList.remove('hidden');
+}
+
+function autoFreq() {
+  const t=document.getElementById('ctTier').value, f=document.getElementById('ctFreq');
+  if(!f.value) f.value=t==='A'?7:t==='B'?30:t==='C'?90:'';
 }
 
 function saveContact() {
-  const name    = document.getElementById('fName').value.trim();
-  const company = document.getElementById('fCompany').value.trim();
-  const tier    = document.getElementById('fTier').value;
-  const freq    = parseInt(document.getElementById('fFreq').value);
-  if (!name || !company || !tier || !freq) { alert('Please fill in all required fields.'); return; }
-
-  const id = document.getElementById('editId').value;
-  const data = {
-    name, company, tier, frequency: freq,
-    email: document.getElementById('fEmail').value.trim(),
-    phone: document.getElementById('fPhone').value.trim(),
-    lastContact: document.getElementById('fLastContact').value,
-    notes: document.getElementById('fNotes').value.trim(),
-  };
-
-  if (id) {
-    const idx = contacts.findIndex(c => c.id === id);
-    if (idx > -1) contacts[idx] = { ...contacts[idx], ...data };
-  } else {
-    contacts.push({ id: genId(), ...data, createdAt: new Date().toISOString() });
-  }
-  save();
-  showView('contacts');
+  const name=document.getElementById('ctName').value.trim(), co=document.getElementById('ctCo').value.trim();
+  const tier=document.getElementById('ctTier').value, freq=parseInt(document.getElementById('ctFreq').value);
+  if(!name||!co||!tier||!freq){document.getElementById('ctErr').classList.remove('hidden');return;}
+  const data={name,company:co,tier,frequency:freq,title:document.getElementById('ctTitle').value.trim(),email:document.getElementById('ctEmail').value.trim(),phone:document.getElementById('ctPhone').value.trim(),lastContact:document.getElementById('ctLast').value,location:document.getElementById('ctLoc').value.trim(),accountSize:document.getElementById('ctSize').value,products:document.getElementById('ctProds').value.trim(),history:document.getElementById('ctHist').value.trim(),notes:document.getElementById('ctNotes').value.trim()};
+  const cid=document.getElementById('ctId').value, contacts=gc();
+  if(cid){const i=contacts.findIndex(c=>c.id===cid);if(i>-1)contacts[i]={...contacts[i],...data};}
+  else contacts.push({id:id(),createdAt:new Date().toISOString(),...data});
+  s(K.contacts,contacts); document.getElementById('ctModal').classList.add('hidden'); renderContacts();
 }
 
-// ── Contact Detail ─────────────────────────────────────────────────────────
-function openContact(id) {
-  currentContactId = id;
-  const c = contacts.find(x => x.id === id);
-  if (!c) return;
-
-  document.getElementById('dName').textContent    = c.name;
-  document.getElementById('dCompany').textContent = c.company;
-  const tb = document.getElementById('dTier');
-  tb.textContent = 'Tier ' + c.tier;
-  tb.className   = 'tier-badge ' + tierClass(c.tier);
-  document.getElementById('dEmail').textContent   = c.email || '—';
-  document.getElementById('dPhone').textContent   = c.phone || '—';
-  document.getElementById('dFreq').textContent    = 'Every ' + c.frequency + ' days';
-  document.getElementById('dLast').textContent    = c.lastContact ? new Date(c.lastContact).toLocaleDateString() : 'Never';
-  document.getElementById('dNotes').textContent   = c.notes || '—';
-
-  const s = statusLabel(c);
-  const sd = document.getElementById('dStatus');
-  sd.textContent = s.text;
-  sd.className   = s.cls;
-
-  cancelMessage();
-
-  const ul    = document.getElementById('contactActivity');
-  const items = activity.filter(a => a.contactId === id).reverse();
-  ul.innerHTML = items.length
-    ? items.map(a => `<li class="activity-item">${esc(a.message)}<div class="act-time">${new Date(a.timestamp).toLocaleString()}</div></li>`).join('')
-    : '<li class="empty-state">No activity yet</li>';
-
-  showView('detail');
+function openDelete() {
+  const cid=document.getElementById('ctId').value, c=gc().find(x=>x.id===cid); if(!c)return;
+  pendingDelete=cid; document.getElementById('delName').textContent=c.name;
+  document.getElementById('delModal').classList.remove('hidden');
 }
 
-function editCurrent() {
-  openAddForm(currentContactId);
-  document.getElementById('view-add').classList.remove('hidden');
-  document.getElementById('view-detail').classList.add('hidden');
+function doDelete() {
+  if(!pendingDelete)return;
+  s(K.contacts,gc().filter(c=>c.id!==pendingDelete));
+  s(K.activity,ga().filter(a=>a.cId!==pendingDelete));
+  s(K.queue,gq().filter(q=>q.cId!==pendingDelete));
+  s(K.drafts,gd().filter(d=>d.cId!==pendingDelete));
+  pendingDelete=null;
+  document.getElementById('delModal').classList.add('hidden');
+  document.getElementById('ctModal').classList.add('hidden');
+  renderContacts();
 }
 
-function deleteCurrent() {
-  const c = contacts.find(x => x.id === currentContactId);
-  if (!c) return;
-  document.getElementById('deleteModalName').textContent = c.name;
-  document.getElementById('deleteModal').classList.remove('hidden');
+// ── AI Message ───────────────────────────────────────────────────────────────
+function openAi(cid) {
+  const c=gc().find(x=>x.id===cid); if(!c)return;
+  aiContact=c;
+  document.getElementById('aiModalTitle').textContent='Message for '+c.name;
+  document.getElementById('aiLoad').classList.remove('hidden');
+  document.getElementById('aiResult').classList.add('hidden');
+  document.getElementById('aiErr').classList.add('hidden');
+  document.getElementById('aiModal').classList.remove('hidden');
+  generateMsg(c);
 }
 
-function closeDeleteModal() {
-  document.getElementById('deleteModal').classList.add('hidden');
-}
-
-function confirmDelete() {
-  contacts  = contacts.filter(c => c.id !== currentContactId);
-  activity  = activity.filter(a => a.contactId !== currentContactId);
-  save();
-  closeDeleteModal();
-  showView('contacts');
-}
-
-// ── Message Generation ─────────────────────────────────────────────────────
-async function generateMessage() {
-  const c = contacts.find(x => x.id === currentContactId);
-  if (!c) return;
-
-  document.getElementById('msgIdle').classList.add('hidden');
-  document.getElementById('msgGenerating').classList.remove('hidden');
-  document.getElementById('msgReady').classList.add('hidden');
-
-  const key = ANTHROPIC_API_KEY;
-  if (!key) {
-    document.getElementById('msgGenerating').classList.add('hidden');
-    document.getElementById('msgIdle').classList.remove('hidden');
-    alert('No API key set. Go to Settings to add your Anthropic API key.');
-    return;
-  }
-
-  const daysSince = c.lastContact
-    ? Math.floor((new Date() - new Date(c.lastContact)) / 86400000)
-    : null;
-
-  const prompt = `Write a short, genuine outreach message from a sales rep to their ${c.tier === 'A' ? 'top-priority' : c.tier === 'B' ? 'mid-tier' : 'lower-tier'} contact.
-
-Contact info:
-- Name: ${c.name}
-- Company: ${c.company}
-- Tier: ${c.tier} (${c.tier === 'A' ? 'High value, touch weekly' : c.tier === 'B' ? 'Mid value, touch monthly' : 'Lower value, touch quarterly'})
-- Last contacted: ${daysSince !== null ? daysSince + ' days ago' : 'never'}
-- Notes: ${c.notes || 'No notes available'}
-
-Write a short (3-5 sentences), warm, professional message. Sound like a real person who knows this contact — not a template. Reference their company or notes if relevant. Do NOT start with "I hope this email finds you well." Output only the message text, no subject line, no signature.`;
-
+async function generateMsg(c) {
+  const key=apiKey||localStorage.getItem(K.apiKey)||'';
+  if(!key){document.getElementById('aiLoad').classList.add('hidden');document.getElementById('aiErr').classList.remove('hidden');document.getElementById('aiErr').textContent='No API key set. Go to Settings to add your Anthropic API key.';return;}
+  const p=gp(), days=c.lastContact?Math.floor((Date.now()-new Date(c.lastContact))/86400000):null;
+  const td=c.tier==='A'?'top priority, contact weekly':c.tier==='B'?'mid-value, contact monthly':'lower priority, contact quarterly';
+  const prompt=`Write a personalized outreach message from ${p.repName||'a rep'} at ${p.company||'our company'}.\n\nCOMPANY: What we sell: ${p.sell||'our products'}. Typical customer: ${p.customer||'businesses'}. Tone: ${p.tone||'Professional'}.\n\nCONTACT: Name: ${c.name}. Company: ${c.company}. Title: ${c.title||'unknown'}. Tier: ${c.tier} (${td}). Location: ${c.location||'unknown'}. Account size: ${c.accountSize||'unknown'}. Days since last contact: ${days!==null?days:'never contacted'}. Products they use: ${c.products||'none noted'}. Relationship history: ${c.history||'none'}. Notes: ${c.notes||'none'}.\n\nWrite a SHORT (3-5 sentence), genuine, personalized message. Sound like a real person who knows this contact. Reference their specific situation where possible. Never start with "I hope this finds you well."\n\nReturn ONLY valid JSON: {"reason":"2 sentence explanation of why you wrote this specific message","message":"the outreach message text"}`;
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5',
-        max_tokens: 300,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error?.message || 'API error ' + res.status);
-    }
-
-    const data = await res.json();
-    const msg  = data.content[0].text.trim();
-
-    document.getElementById('msgText').value = msg;
-    document.getElementById('msgGenerating').classList.add('hidden');
-    document.getElementById('msgReady').classList.remove('hidden');
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:500,messages:[{role:'user',content:prompt}]})});
+    if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'API error '+res.status);}
+    const data=await res.json(); let txt=data.content[0].text.trim();
+    if(txt.startsWith('```'))txt=txt.split('\n').slice(1,-1).join('\n');
+    const parsed=JSON.parse(txt);
+    document.getElementById('aiReason').textContent=parsed.reason;
+    document.getElementById('aiMsg').value=parsed.message;
+    document.getElementById('aiLoad').classList.add('hidden');
+    document.getElementById('aiResult').classList.remove('hidden');
   } catch(e) {
-    document.getElementById('msgGenerating').classList.add('hidden');
-    document.getElementById('msgIdle').classList.remove('hidden');
-    alert('Message generation failed: ' + e.message);
+    document.getElementById('aiLoad').classList.add('hidden');
+    document.getElementById('aiErr').classList.remove('hidden');
+    document.getElementById('aiErr').textContent='Failed: '+e.message;
   }
 }
 
-async function regenerateMessage() {
-  cancelMessage();
-  await generateMessage();
+function addToQueue() {
+  const msg=document.getElementById('aiMsg').value.trim(), reason=document.getElementById('aiReason').textContent;
+  if(!msg||!aiContact)return;
+  s(K.queue,[...gq(),{id:id(),cId:aiContact.id,cName:aiContact.name,co:aiContact.company,msg,reason,added:new Date().toISOString()}]);
+  document.getElementById('aiModal').classList.add('hidden'); aiContact=null; showView('queue');
 }
 
-function approveMessage() {
-  const msg = document.getElementById('msgText').value.trim();
-  if (!msg) return;
-  const c = contacts.find(x => x.id === currentContactId);
-  if (!c) return;
+function saveDraft() {
+  const msg=document.getElementById('aiMsg').value.trim(), reason=document.getElementById('aiReason').textContent;
+  if(!msg||!aiContact)return;
+  s(K.drafts,[...gd(),{id:id(),cId:aiContact.id,cName:aiContact.name,co:aiContact.company,msg,reason,saved:new Date().toISOString()}]);
+  document.getElementById('aiModal').classList.add('hidden'); aiContact=null;
+}
 
-  // Log activity
-  activity.push({
-    id: genId(),
-    contactId: c.id,
-    contactName: c.name,
-    message: msg,
-    timestamp: new Date().toISOString()
+// ── Queue ────────────────────────────────────────────────────────────────────
+function renderQueue() {
+  const q=gq(), list=document.getElementById('queueList'), empty=document.getElementById('queueEmpty');
+  if(!q.length){list.innerHTML='';empty.classList.remove('hidden');return;}
+  empty.classList.add('hidden');
+  list.innerHTML=q.map(item=>`<div class="queue-item"><div class="queue-who">${esc(item.cName)}</div><div class="queue-co">${esc(item.co)}</div><div class="queue-why">💡 ${esc(item.reason)}</div><div class="queue-msg">${esc(item.msg)}</div><div class="queue-actions"><button class="btn-primary btn-sm" onclick="markSent('${item.id}')">✓ Mark Sent</button><button class="btn-ghost btn-sm" onclick="editInQueue('${item.id}')">Edit</button><button class="btn-ghost btn-sm" onclick="removeQ('${item.id}')">Remove</button></div></div>`).join('');
+}
+
+function markSent(qid) {
+  const q=gq(), item=q.find(x=>x.id===qid); if(!item)return;
+  s(K.activity,[...ga(),{id:id(),cId:item.cId,cName:item.cName,co:item.co,msg:item.msg,reason:item.reason,ts:new Date().toISOString()}]);
+  const cts=gc(), i=cts.findIndex(c=>c.id===item.cId); if(i>-1)cts[i].lastContact=new Date().toISOString().split('T')[0];
+  s(K.contacts,cts); s(K.queue,q.filter(x=>x.id!==qid)); renderQueue();
+}
+
+function markAllSent() {
+  gq().forEach(item=>{
+    s(K.activity,[...ga(),{id:id(),cId:item.cId,cName:item.cName,co:item.co,msg:item.msg,reason:item.reason,ts:new Date().toISOString()}]);
+    const cts=gc(), i=cts.findIndex(c=>c.id===item.cId); if(i>-1)cts[i].lastContact=new Date().toISOString().split('T')[0]; s(K.contacts,cts);
   });
-
-  // Update last contact date
-  const idx = contacts.findIndex(x => x.id === currentContactId);
-  if (idx > -1) contacts[idx].lastContact = new Date().toISOString().split('T')[0];
-
-  save();
-  cancelMessage();
-  openContact(currentContactId);
+  s(K.queue,[]); renderQueue();
 }
 
-function cancelMessage() {
-  document.getElementById('msgIdle').classList.remove('hidden');
-  document.getElementById('msgGenerating').classList.add('hidden');
-  document.getElementById('msgReady').classList.add('hidden');
-  document.getElementById('msgText').value = '';
+function editInQueue(qid) {
+  const item=gq().find(x=>x.id===qid); if(!item)return;
+  const c=gc().find(x=>x.id===item.cId); if(!c)return;
+  aiContact=c;
+  document.getElementById('aiReason').textContent=item.reason;
+  document.getElementById('aiMsg').value=item.msg;
+  document.getElementById('aiLoad').classList.add('hidden');
+  document.getElementById('aiResult').classList.remove('hidden');
+  document.getElementById('aiErr').classList.add('hidden');
+  document.getElementById('aiModal').classList.remove('hidden');
+  s(K.queue,gq().filter(x=>x.id!==qid));
 }
 
-// ── Settings ───────────────────────────────────────────────────────────────
+function removeQ(qid) { s(K.queue,gq().filter(x=>x.id!==qid)); renderQueue(); }
+
+// ── Drafts ───────────────────────────────────────────────────────────────────
+function renderDrafts() {
+  const drafts=gd(), list=document.getElementById('draftList'), empty=document.getElementById('draftEmpty');
+  if(!drafts.length){list.innerHTML='';empty.classList.remove('hidden');return;}
+  empty.classList.add('hidden');
+  list.innerHTML=drafts.map(d=>`<div class="queue-item"><div class="queue-who">${esc(d.cName)}</div><div class="queue-co">${esc(d.co)} · ${new Date(d.saved).toLocaleDateString()}</div><div class="queue-msg">${esc(d.msg.slice(0,120))}${d.msg.length>120?'…':''}</div><div class="queue-actions"><button class="btn-primary btn-sm" onclick="draftToQueue('${d.id}')">Move to Queue</button><button class="btn-ghost btn-sm" onclick="removeDraft('${d.id}')">Remove</button></div></div>`).join('');
+}
+
+function draftToQueue(did) {
+  const drafts=gd(), item=drafts.find(x=>x.id===did); if(!item)return;
+  s(K.queue,[...gq(),{...item,added:new Date().toISOString()}]);
+  s(K.drafts,drafts.filter(x=>x.id!==did)); renderDrafts();
+}
+
+function removeDraft(did) { s(K.drafts,gd().filter(x=>x.id!==did)); renderDrafts(); }
+
+// ── Settings ─────────────────────────────────────────────────────────────────
 function loadSettings() {
-  document.getElementById('settingsApiKey').value = localStorage.getItem('relayai_api_key') || '';
-  document.getElementById('settingsSaved').classList.add('hidden');
+  const key=localStorage.getItem(K.apiKey)||'', p=gp();
+  document.getElementById('apiIn').value=key;
+  document.getElementById('sCo').value=p.company||''; document.getElementById('sSell').value=p.sell||'';
+  document.getElementById('sCust').value=p.customer||''; document.getElementById('sTone').value=p.tone||'Professional';
+  document.getElementById('sRep').value=p.repName||'';
+  document.getElementById('apiWarn').classList[key?'add':'remove']('hidden');
+  document.getElementById('saveOk').classList.add('hidden');
 }
 
 function saveSettings() {
-  const key = document.getElementById('settingsApiKey').value.trim();
-  localStorage.setItem('relayai_api_key', key);
-  ANTHROPIC_API_KEY = key;
-  if (key) document.getElementById('apiBanner').classList.add('hidden');
-  document.getElementById('settingsSaved').classList.remove('hidden');
-  setTimeout(() => document.getElementById('settingsSaved').classList.add('hidden'), 2000);
+  const key=document.getElementById('apiIn').value.trim();
+  localStorage.setItem(K.apiKey,key); apiKey=key;
+  s(K.profile,{company:document.getElementById('sCo').value.trim(),sell:document.getElementById('sSell').value.trim(),customer:document.getElementById('sCust').value.trim(),tone:document.getElementById('sTone').value,repName:document.getElementById('sRep').value.trim()});
+  document.getElementById('apiWarn').classList[key?'add':'remove']('hidden');
+  document.getElementById('saveOk').classList.remove('hidden');
+  setTimeout(()=>document.getElementById('saveOk').classList.add('hidden'),2000);
 }
 
-// ── Escape HTML ────────────────────────────────────────────────────────────
-function esc(str) {
-  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+// ── Events ────────────────────────────────────────────────────────────────────
+document.getElementById('loginBtn').onclick=login;
+document.getElementById('lu').onkeydown=e=>e.key==='Enter'&&login();
+document.getElementById('lp').onkeydown=e=>e.key==='Enter'&&login();
+document.getElementById('logoutBtn').onclick=logout;
+document.getElementById('obSave').onclick=saveOb;
+document.getElementById('obSkip').onclick=skipOb;
+document.getElementById('obSkip2').onclick=skipOb;
+document.querySelectorAll('.nav-item').forEach(n=>n.addEventListener('click',()=>showView(n.dataset.view)));
+document.getElementById('addBtn').onclick=openAdd;
+document.getElementById('ctSave').onclick=saveContact;
+document.getElementById('ctCancel').onclick=()=>document.getElementById('ctModal').classList.add('hidden');
+document.getElementById('ctClose').onclick=()=>document.getElementById('ctModal').classList.add('hidden');
+document.getElementById('ctDeleteBtn').onclick=openDelete;
+document.getElementById('delConfirm').onclick=doDelete;
+document.getElementById('delCancel').onclick=()=>document.getElementById('delModal').classList.add('hidden');
+document.getElementById('aiClose').onclick=()=>{document.getElementById('aiModal').classList.add('hidden');aiContact=null;};
+document.getElementById('aiQueue').onclick=addToQueue;
+document.getElementById('aiDraft').onclick=saveDraft;
+document.getElementById('aiRegen').onclick=()=>{if(!aiContact)return;document.getElementById('aiLoad').classList.remove('hidden');document.getElementById('aiResult').classList.add('hidden');generateMsg(aiContact);};
+document.getElementById('markAllBtn').onclick=markAllSent;
+document.getElementById('saveSetBtn').onclick=saveSettings;
+document.getElementById('searchQ').oninput=renderContacts;
+document.getElementById('tierF').onchange=renderContacts;
+document.getElementById('statF').onchange=renderContacts;
+['ctModal','aiModal','delModal','obModal'].forEach(id=>{
+  document.getElementById(id).addEventListener('click',function(e){if(e.target===this)this.classList.add('hidden');});
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')['ctModal','aiModal','delModal','obModal'].forEach(id=>document.getElementById(id).classList.add('hidden'));});
 
-// ── Init ───────────────────────────────────────────────────────────────────
-load();
-if (!ANTHROPIC_API_KEY) document.getElementById('apiBanner').classList.remove('hidden');
+// ── Init ──────────────────────────────────────────────────────────────────────
+apiKey=localStorage.getItem(K.apiKey)||'';
+const sess=g(K.session);
+if(sess&&CREDS[sess]){currentUser=sess;document.getElementById('loginView').classList.add('hidden');document.getElementById('appView').classList.remove('hidden');document.getElementById('sidebarUser').textContent=sess;showView('dashboard');}
 </script>
 </body>
 </html>
