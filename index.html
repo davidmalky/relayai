@@ -3,279 +3,400 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Renzo - Relationships that remember</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Renzo — Relationships that remember</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',system-ui,sans-serif;background:#F7F4EF;color:#1A1A1A;line-height:1.5}
+:root{
+  --bg:#F7F4EF;--white:#FFFFFF;--dark:#1A1A1A;--mid:#2D2D2D;
+  --green:#2D6A4F;--green-light:#40916C;--green-pale:#D8F3DC;
+  --amber:#E9C46A;--amber-pale:#FFF3CD;
+  --red:#E63946;--red-pale:#FFE5E7;
+  --gray:#6B7280;--gray-light:#E5E0D8;--gray-pale:#F0EDE8;
+  --sidebar:#1A1A1A;--sidebar-text:#E8E4DC;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 2px 8px rgba(0,0,0,.04);
+  --shadow-lg:0 4px 20px rgba(0,0,0,.12);
+  --radius:10px;--radius-sm:6px;
+}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--dark);line-height:1.5;font-size:14px}
 .hidden{display:none!important}
-.app-container{display:flex;height:100vh}
-.sidebar{width:240px;background:#1A1A1A;color:#F7F4EF;display:flex;flex-direction:column;padding:24px 0;flex-shrink:0}
-.sidebar-logo{font-size:24px;font-weight:700;color:#2D6A4F;padding:0 24px;margin-bottom:32px}
-.sidebar-nav{flex:1}
-.nav-item{padding:12px 24px;cursor:pointer;transition:background .2s;font-size:14px;border:none;background:none;color:#F7F4EF;width:100%;text-align:left;display:block}
-.nav-item:hover{background:rgba(255,255,255,.07)}
-.nav-item.active{background:#2D6A4F}
-.sidebar-footer{padding:16px 24px;border-top:1px solid rgba(255,255,255,.1);margin-top:auto}
-.user-name{font-size:13px;margin-bottom:8px;color:#9CA3AF}
-.logout-btn{background:transparent;border:1px solid rgba(255,255,255,.25);color:#F7F4EF;padding:8px 16px;border-radius:8px;cursor:pointer;width:100%;font-size:13px;font-family:inherit}
-.logout-btn:hover{background:rgba(255,255,255,.1)}
-.main-content{flex:1;overflow-y:auto;padding:32px}
-.login-container{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#F7F4EF}
-.login-card{background:#FFF;padding:48px;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.04);width:400px;text-align:center}
-.login-logo{font-size:32px;font-weight:700;color:#1A1A1A;margin-bottom:8px}
-.login-tagline{color:#6B7280;margin-bottom:32px;font-size:15px}
-.input-group{margin-bottom:16px;text-align:left}
-.input-group label{display:block;font-size:14px;font-weight:500;margin-bottom:4px;color:#374151}
-.input-group input,.input-group textarea,.input-group select{width:100%;padding:10px 12px;border:1px solid #E5E0D8;border-radius:8px;font-size:14px;font-family:inherit;background:#FFF;color:#1A1A1A}
-.input-group input:focus,.input-group textarea:focus,.input-group select:focus{outline:none;border-color:#2D6A4F;box-shadow:0 0 0 3px rgba(45,106,79,.1)}
-.input-group textarea{resize:vertical}
-.btn-primary{background:#2D6A4F;color:#FFF;padding:11px 20px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s}
-.btn-primary:hover{background:#245a40}
-.btn-primary:disabled{opacity:.6;cursor:not-allowed}
-.btn-secondary{background:#6B7280;color:#FFF;padding:11px 20px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
-.btn-ghost{background:transparent;color:#6B7280;padding:9px 16px;border:1px solid #E5E0D8;border-radius:8px;font-size:14px;cursor:pointer;font-family:inherit}
-.btn-ghost:hover{background:#F7F4EF;color:#1A1A1A}
-.btn-danger{background:#DC2626;color:#FFF;padding:9px 16px;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-family:inherit}
-.btn-danger:hover{background:#b91c1c}
+button,input,select,textarea{font-family:inherit;font-size:14px}
+button{cursor:pointer}
+a{color:var(--green);text-decoration:none}
+
+/* ── LOGIN ── */
+#loginView{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--bg);padding:20px}
+.login-card{background:var(--white);border-radius:16px;box-shadow:var(--shadow-lg);width:100%;max-width:400px;padding:48px 40px;text-align:center}
+.login-logo{font-family:'DM Serif Display',serif;font-size:36px;color:var(--dark);margin-bottom:6px;letter-spacing:-.5px}
+.login-tag{color:var(--gray);margin-bottom:36px;font-size:15px}
+.api-warn-banner{background:var(--amber-pale);border:1px solid var(--amber);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:20px;font-size:13px;color:#92400e;text-align:left}
+
+/* ── FIELDS ── */
+.field{margin-bottom:16px;text-align:left}
+.field label{display:block;font-weight:500;color:var(--gray);font-size:12px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;padding:11px 13px;border:1.5px solid var(--gray-light);border-radius:var(--radius-sm);background:var(--white);color:var(--dark);transition:border .15s,box-shadow .15s;outline:none}
+.field input:focus,.field select,.field textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(45,106,79,.1)}
+.field textarea{resize:vertical;min-height:80px}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath fill='%236B7280' d='M5 7L0 0h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:30px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field .hint{font-size:11px;color:var(--gray);margin-top:4px}
+.error-text{color:var(--red);font-size:12px;margin-top:4px}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 18px;border-radius:var(--radius-sm);font-weight:500;border:none;transition:all .15s;white-space:nowrap}
+.btn-primary{background:var(--green);color:#fff}.btn-primary:hover{background:var(--green-light)}
+.btn-ghost{background:transparent;color:var(--gray);border:1.5px solid var(--gray-light)}.btn-ghost:hover{background:var(--gray-pale);color:var(--dark)}
+.btn-danger{background:var(--red);color:#fff}.btn-danger:hover{opacity:.9}
 .btn-sm{padding:6px 12px;font-size:13px}
-.error-msg{color:#DC2626;font-size:14px;margin-top:6px}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px}
-.modal-box{background:#FFF;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.18);max-width:620px;width:100%;max-height:90vh;overflow-y:auto;padding:32px}
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
-.modal-title{font-size:20px;font-weight:700}
-.close-btn{background:none;border:none;font-size:24px;cursor:pointer;color:#9CA3AF;line-height:1;padding:4px 8px}
-.close-btn:hover{color:#1A1A1A}
-.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;margin-bottom:28px}
-.stat-card{background:#FFF;padding:20px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.07)}
-.stat-label{font-size:12px;color:#9CA3AF;margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
-.stat-value{font-size:32px;font-weight:700}
-.section-title{font-size:17px;font-weight:700;margin-bottom:14px;color:#1A1A1A}
-.card-list{background:#FFF;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.07);overflow:hidden}
-.card-row{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid #F0EBE3;gap:12px}
-.card-row:last-child{border-bottom:none}
-.card-row:hover{background:#FAFAF8}
-.contact-name{font-weight:600;margin-bottom:2px;font-size:15px}
-.contact-sub{font-size:13px;color:#9CA3AF}
-.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:.3px}
-.badge-a{background:#d1fae5;color:#065f46}
-.badge-b{background:#fef3c7;color:#92400e}
-.badge-c{background:#e2e8f0;color:#475569}
-.pill{display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:500}
-.pill-overdue{background:#fee2e2;color:#991b1b}
-.pill-due{background:#fef3c7;color:#92400e}
-.pill-ok{background:#d1fae5;color:#065f46}
-.toolbar{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
-.search-input{flex:1;min-width:160px;padding:9px 12px;border:1px solid #E5E0D8;border-radius:8px;font-size:14px;font-family:inherit;background:#FFF}
-.search-input:focus{outline:none;border-color:#2D6A4F}
-.tbl-wrap{background:#FFF;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.07);overflow-x:auto}
+.btn-xs{padding:4px 10px;font-size:12px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-full{width:100%}
+
+/* ── APP SHELL ── */
+#appView{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:220px;background:var(--sidebar);color:var(--sidebar-text);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.sidebar-logo{font-family:'DM Serif Display',serif;font-size:22px;color:var(--green);padding:24px 20px 20px;border-bottom:1px solid rgba(255,255,255,.06)}
+.sidebar-logo span{display:block;font-family:'DM Sans',sans-serif;font-size:11px;color:rgba(232,228,220,.5);margin-top:2px;font-weight:400;letter-spacing:.3px}
+nav{flex:1;padding:8px 0}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;color:rgba(232,228,220,.7);font-size:13px;font-weight:500;border:none;background:none;width:100%;text-align:left;border-left:3px solid transparent;transition:all .15s;cursor:pointer}
+.nav-item:hover{background:rgba(255,255,255,.05);color:var(--sidebar-text)}
+.nav-item.active{color:#fff;border-left-color:var(--green);background:rgba(45,106,79,.15)}
+.nav-badge{background:var(--red);color:#fff;border-radius:10px;padding:1px 6px;font-size:10px;font-weight:600;margin-left:auto}
+.sidebar-footer{padding:16px 20px;border-top:1px solid rgba(255,255,255,.06)}
+.sidebar-user{font-size:12px;color:rgba(232,228,220,.5);margin-bottom:8px}
+.sidebar-logout{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--sidebar-text);padding:7px 14px;border-radius:var(--radius-sm);font-size:13px;width:100%;cursor:pointer;transition:background .15s}
+.sidebar-logout:hover{background:rgba(255,255,255,.12)}
+
+/* ── MAIN ── */
+.main{flex:1;overflow-y:auto}
+.view{padding:28px 32px;max-width:1100px}
+.view-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.view-title{font-family:'DM Serif Display',serif;font-size:26px;letter-spacing:-.3px}
+.view-actions{display:flex;gap:10px;align-items:center}
+
+/* ── STATS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:28px}
+.stat-card{background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.stat-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--gray);margin-bottom:6px}
+.stat-value{font-size:32px;font-weight:600;color:var(--dark);line-height:1}
+.stat-value.red{color:var(--red)}.stat-value.amber{color:#B45309}.stat-value.green{color:var(--green)}
+
+/* ── SECTION ── */
+.section-title{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--gray);margin-bottom:12px}
+.card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+
+/* ── PRIORITY BADGE ── */
+.priority-badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700}
+.priority-high{background:var(--red-pale);color:#991B1B}
+.priority-med{background:var(--amber-pale);color:#92400E}
+.priority-low{background:var(--green-pale);color:#065F46}
+.tier-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700}
+.tier-a{background:#FEE2E2;color:#991B1B}
+.tier-b{background:#FEF3C7;color:#92400E}
+.tier-c{background:#E0E7FF;color:#3730A3}
+
+/* ── TABLE ── */
+.table-wrap{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
 table{width:100%;border-collapse:collapse}
-th{text-align:left;padding:11px 14px;background:#F7F4EF;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:#6B7280;border-bottom:1px solid #E5E0D8;white-space:nowrap}
-td{padding:12px 14px;border-bottom:1px solid #F0EBE3;font-size:14px;vertical-align:middle}
-tr:last-child td{border-bottom:none}
-tbody tr{cursor:pointer}
-tbody tr:hover td{background:#FAFAF8}
-.empty-state{text-align:center;padding:48px 24px;color:#9CA3AF;background:#FFF;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.07)}
-.empty-state strong{display:block;font-size:16px;color:#6B7280;margin-bottom:6px}
-.info-box{background:#ecfdf5;border-left:4px solid #2D6A4F;padding:14px 16px;border-radius:4px;margin-bottom:16px}
-.info-box-title{font-weight:600;color:#065f46;font-size:13px;margin-bottom:4px}
-.info-box p{font-size:14px;color:#065f46;line-height:1.5}
-.warning-banner{background:#fffbeb;border-left:4px solid #f59e0b;padding:12px 16px;border-radius:4px;margin-bottom:18px;font-size:14px;color:#92400e}
-.activity-row{padding:14px 16px;border-bottom:1px solid #F0EBE3}
-.activity-row:last-child{border-bottom:none}
-.activity-time{font-size:12px;color:#9CA3AF;margin-bottom:3px}
+th{padding:11px 14px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--gray);background:var(--gray-pale);border-bottom:1px solid var(--gray-light)}
+td{padding:12px 14px;border-bottom:1px solid var(--gray-pale);vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr.clickable{cursor:pointer}
+tbody tr.clickable:hover td{background:var(--gray-pale)}
+.empty-state{text-align:center;padding:48px 24px;color:var(--gray)}
+.empty-state strong{display:block;font-size:16px;color:var(--mid);margin-bottom:6px}
+
+/* ── TOOLBAR ── */
+.toolbar{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
+.search-input{flex:1;min-width:160px;padding:9px 12px;border:1.5px solid var(--gray-light);border-radius:var(--radius-sm);background:var(--white);outline:none;transition:border .15s}
+.search-input:focus{border-color:var(--green)}
+.filter-select{padding:9px 28px 9px 11px;border:1.5px solid var(--gray-light);border-radius:var(--radius-sm);background:var(--white);outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath fill='%236B7280' d='M5 7L0 0h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;cursor:pointer}
+
+/* ── ACTIVITY ── */
+.activity-list{list-style:none}
+.activity-item{padding:14px 16px;border-bottom:1px solid var(--gray-pale)}
+.activity-item:last-child{border-bottom:none}
+.activity-time{font-size:11px;color:var(--gray);margin-bottom:3px}
 .activity-who{font-weight:600;font-size:14px}
-.activity-msg{font-size:13px;color:#6B7280;margin-top:2px;line-height:1.4}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.view-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px}
-.queue-item{padding:18px 16px;border-bottom:1px solid #F0EBE3}
+.activity-preview{font-size:13px;color:var(--gray);margin-top:2px}
+.activity-trigger{font-size:11px;color:var(--green);font-weight:500;margin-top:2px}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px}
+.modal-box{background:var(--white);border-radius:14px;box-shadow:var(--shadow-lg);width:100%;max-width:600px;max-height:92vh;overflow-y:auto;padding:32px}
+.modal-sm{max-width:400px}
+.modal-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px}
+.modal-title{font-family:'DM Serif Display',serif;font-size:22px;letter-spacing:-.2px}
+.modal-close{background:none;border:none;font-size:22px;color:var(--gray);cursor:pointer;padding:4px 8px;line-height:1;border-radius:4px}
+.modal-close:hover{background:var(--gray-pale)}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:24px;flex-wrap:wrap}
+
+/* ── TRIGGER BOX ── */
+.trigger-box{background:var(--green-pale);border-left:4px solid var(--green);padding:14px 16px;border-radius:4px;margin-bottom:16px}
+.trigger-box-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--green);margin-bottom:4px}
+.trigger-box p{font-size:14px;color:#1B4332;line-height:1.5}
+.msg-textarea{width:100%;padding:14px;border:1.5px solid var(--gray-light);border-radius:var(--radius-sm);min-height:140px;resize:vertical;line-height:1.6;outline:none;transition:border .15s}
+.msg-textarea:focus{border-color:var(--green)}
+
+/* ── QUEUE ITEMS ── */
+.queue-item{padding:18px 20px;border-bottom:1px solid var(--gray-pale)}
 .queue-item:last-child{border-bottom:none}
-.queue-who{font-weight:600;font-size:15px}
-.queue-co{font-size:13px;color:#9CA3AF;margin-bottom:8px}
-.queue-why{font-size:13px;color:#2D6A4F;font-style:italic;margin-bottom:6px;padding:8px 12px;background:#ecfdf5;border-radius:6px}
-.queue-msg{font-size:14px;color:#374151;line-height:1.5;margin-bottom:12px}
+.queue-who{font-weight:600;font-size:15px;margin-bottom:2px}
+.queue-co{font-size:13px;color:var(--gray);margin-bottom:6px}
+.queue-trigger{font-size:12px;color:var(--green);font-weight:500;margin-bottom:8px;font-style:italic}
+.queue-preview{font-size:14px;color:var(--mid);line-height:1.5;margin-bottom:12px}
 .queue-actions{display:flex;gap:8px;flex-wrap:wrap}
-.success-text{color:#2D6A4F;font-size:14px;font-weight:500}
-.spinner{border:3px solid #E5E0D8;border-top:3px solid #2D6A4F;border-radius:50%;width:36px;height:36px;animation:spin .8s linear infinite;margin:0 auto 14px}
+
+/* ── LOADING ── */
+.spinner{border:3px solid var(--gray-light);border-top-color:var(--green);border-radius:50%;width:32px;height:32px;animation:spin .7s linear infinite;margin:0 auto 12px}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loading-box{text-align:center;padding:32px;color:#6B7280}
-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236B7280' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
-@media(max-width:640px){
-  .app-container{flex-direction:column;height:auto;min-height:100vh}
-  .sidebar{width:100%;flex-direction:row;padding:12px 8px;align-items:center;flex-wrap:wrap;height:auto}
-  .sidebar-logo{margin-bottom:0;padding:0 8px;font-size:18px}
-  .sidebar-nav{display:flex;flex-wrap:wrap}
-  .nav-item{padding:8px 10px;font-size:13px}
+.loading-box{text-align:center;padding:32px;color:var(--gray)}
+
+/* ── TOAST ── */
+.toast-container{position:fixed;bottom:24px;right:24px;z-index:2000;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--dark);color:#fff;padding:12px 18px;border-radius:var(--radius-sm);font-size:14px;box-shadow:var(--shadow-lg);animation:slideUp .2s ease;max-width:320px}
+.toast.success{background:var(--green)}.toast.error{background:var(--red)}
+@keyframes slideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── BATCH ── */
+.batch-prompt-area{width:100%;padding:14px;border:1.5px solid var(--gray-light);border-radius:var(--radius-sm);min-height:100px;resize:vertical;outline:none;font-size:15px;line-height:1.6;transition:border .15s}
+.batch-prompt-area:focus{border-color:var(--green)}
+.batch-hint{font-size:12px;color:var(--gray);margin-top:8px}
+.progress-bar{height:6px;background:var(--gray-pale);border-radius:3px;overflow:hidden;margin:16px 0}
+.progress-fill{height:100%;background:var(--green);border-radius:3px;transition:width .3s}
+.progress-label{font-size:13px;color:var(--gray);text-align:center}
+
+/* ── CSV ── */
+.csv-preview-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px}
+.csv-preview-table th{background:var(--gray-pale);padding:8px 10px;text-align:left;font-weight:600;border-bottom:1px solid var(--gray-light)}
+.csv-preview-table td{padding:7px 10px;border-bottom:1px solid var(--gray-pale)}
+.file-drop-area{border:2px dashed var(--gray-light);border-radius:var(--radius);padding:32px;text-align:center;cursor:pointer;transition:all .15s;background:var(--gray-pale)}
+.file-drop-area:hover,.file-drop-area.drag-over{border-color:var(--green);background:var(--green-pale)}
+.file-drop-area p{color:var(--gray);margin-top:8px;font-size:13px}
+
+/* ── RULES ── */
+.rule-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:var(--gray-pale);border-radius:var(--radius-sm);margin-bottom:8px}
+.rule-text{flex:1;font-size:13px;line-height:1.4}
+.rule-delete{background:none;border:none;color:var(--gray);cursor:pointer;font-size:16px;padding:0 4px;border-radius:3px;transition:color .15s}
+.rule-delete:hover{color:var(--red)}
+
+/* ── DUE LIST ── */
+.due-item{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--gray-pale);gap:12px}
+.due-item:last-child{border-bottom:none}
+.due-info{flex:1;min-width:0}
+.due-name{font-weight:600;margin-bottom:2px}
+.due-meta{font-size:12px;color:var(--gray)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:700px){
+  #appView{flex-direction:column}
+  .sidebar{width:100%;flex-direction:row;height:auto;flex-wrap:wrap;padding:12px}
+  .sidebar-logo{padding:0 12px 0 0;border-bottom:none;font-size:18px}
+  nav{display:flex;flex-wrap:wrap;gap:4px;flex:1}
+  .nav-item{padding:6px 10px;border-left:none;border-bottom:2px solid transparent;font-size:12px}
+  .nav-item.active{border-left:none;border-bottom-color:var(--green)}
   .sidebar-footer{display:none}
-  .main-content{padding:16px}
+  .main{height:calc(100vh - 80px)}
+  .view{padding:16px}
   .form-row{grid-template-columns:1fr}
-  .stat-grid{grid-template-columns:1fr 1fr}
+  .modal-box{padding:20px}
 }
 </style>
 </head>
 <body>
 
+<div class="toast-container" id="toastContainer"></div>
+
 <!-- LOGIN -->
-<div id="loginView" class="login-container">
+<div id="loginView">
   <div class="login-card">
     <div class="login-logo">Renzo</div>
-    <div class="login-tagline">Relationships that remember</div>
-    <div class="input-group">
-      <label for="lu">Username</label>
-      <input type="text" id="lu" autocomplete="username" placeholder="admin">
+    <div class="login-tag">Relationships that remember</div>
+    <div id="apiWarnBanner" class="api-warn-banner hidden">⚠ No API key set — AI features disabled. Add your key in Settings after login.</div>
+    <div class="field"><label>Username</label><input type="text" id="loginUser" placeholder="admin" autocomplete="username"></div>
+    <div class="field"><label>Password</label><input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
+      <div id="loginErr" class="error-text hidden">Incorrect credentials</div>
     </div>
-    <div class="input-group">
-      <label for="lp">Password</label>
-      <input type="password" id="lp" autocomplete="current-password" placeholder="••••••••">
-    </div>
-    <div id="loginErr" class="error-msg hidden">Incorrect username or password.</div>
-    <button class="btn-primary" id="loginBtn" style="width:100%;margin-top:8px">Log In</button>
+    <button class="btn btn-primary btn-full" id="loginBtn">Log In</button>
   </div>
 </div>
 
 <!-- ONBOARDING -->
-<div id="obModal" class="modal-overlay hidden">
-  <div class="modal-box" style="max-width:500px">
-    <div class="modal-header">
-      <h2 class="modal-title">Set up your profile</h2>
-      <button class="close-btn" id="obSkip">×</button>
-    </div>
-    <p style="color:#6B7280;font-size:14px;margin-bottom:20px">Help Renzo write messages that sound like you.</p>
-    <div class="input-group"><label>Company Name</label><input type="text" id="obCo" placeholder="Prime Source"></div>
-    <div class="input-group"><label>What you sell</label><textarea id="obSell" rows="2" placeholder="Describe your products or services..."></textarea></div>
-    <div class="input-group"><label>Typical customer</label><textarea id="obCust" rows="2" placeholder="Who are they and what do they care about?"></textarea></div>
+<div id="onboardModal" class="modal-overlay hidden">
+  <div class="modal-box" style="max-width:480px">
+    <div class="modal-header"><h2 class="modal-title">Set up your profile</h2></div>
+    <p style="color:var(--gray);margin-bottom:20px;font-size:14px">Help Renzo write messages that sound like you.</p>
+    <div class="field"><label>Company Name</label><input type="text" id="obCo" placeholder="Prime Source"></div>
+    <div class="field"><label>What you sell</label><textarea id="obSell" rows="2" placeholder="Describe your products or services..."></textarea></div>
+    <div class="field"><label>Typical customer</label><textarea id="obCust" rows="2" placeholder="Who are they and what do they care about?"></textarea></div>
     <div class="form-row">
-      <div class="input-group"><label>Tone</label><select id="obTone"><option>Professional</option><option>Conversational</option><option>Direct</option><option>Warm</option></select></div>
-      <div class="input-group"><label>Your name</label><input type="text" id="obRep" placeholder="David"></div>
+      <div class="field"><label>Tone</label><select id="obTone"><option>Professional</option><option>Conversational</option><option>Direct</option><option>Warm</option></select></div>
+      <div class="field"><label>Your name</label><input type="text" id="obRep" placeholder="David"></div>
     </div>
     <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
-      <button class="btn-ghost" id="obSkip2">Skip</button>
-      <button class="btn-primary" id="obSave" style="width:auto">Save & Start</button>
+      <button class="btn btn-ghost" id="obSkip">Skip for now</button>
+      <button class="btn btn-primary" id="obSave">Save & Start</button>
     </div>
   </div>
 </div>
 
 <!-- APP -->
-<div id="appView" class="app-container hidden">
+<div id="appView" class="hidden">
   <aside class="sidebar">
-    <div class="sidebar-logo">Renzo</div>
-    <nav class="sidebar-nav">
-      <button class="nav-item active" data-view="dashboard">Dashboard</button>
-      <button class="nav-item" data-view="contacts">Contacts</button>
-      <button class="nav-item" data-view="queue">Outreach Queue</button>
-      <button class="nav-item" data-view="drafts">Drafts</button>
-      <button class="nav-item" data-view="settings">Settings</button>
+    <div class="sidebar-logo">Renzo<span id="sidebarSub">Relationship Outreach</span></div>
+    <nav id="mainNav">
+      <button class="nav-item active" data-view="dashboard">📊 Dashboard</button>
+      <button class="nav-item" data-view="contacts">👥 Contacts</button>
+      <button class="nav-item" data-view="queue">📬 Queue <span class="nav-badge hidden" id="queueBadge">0</span></button>
+      <button class="nav-item" data-view="drafts">📝 Drafts</button>
+      <button class="nav-item" data-view="batch">⚡ Batch Outreach</button>
+      <button class="nav-item" data-view="settings">⚙ Settings</button>
     </nav>
     <div class="sidebar-footer">
-      <div class="user-name" id="sidebarUser"></div>
-      <button class="logout-btn" id="logoutBtn">Logout</button>
+      <div class="sidebar-user" id="sidebarUser"></div>
+      <button class="sidebar-logout" id="logoutBtn">Logout</button>
     </div>
   </aside>
 
-  <main class="main-content">
+  <main class="main">
+
     <!-- DASHBOARD -->
-    <div id="view-dashboard">
+    <div id="view-dashboard" class="view">
       <div style="margin-bottom:24px">
-        <div style="font-size:26px;font-weight:700" id="greeting"></div>
-        <div style="color:#9CA3AF;font-size:14px;margin-top:2px" id="todayDate"></div>
+        <div style="font-family:'DM Serif Display',serif;font-size:28px;letter-spacing:-.3px" id="greeting"></div>
+        <div style="color:var(--gray);font-size:14px;margin-top:3px" id="todayDate"></div>
       </div>
-      <div class="stat-grid">
+      <div class="stats-grid">
         <div class="stat-card"><div class="stat-label">Total Contacts</div><div class="stat-value" id="sTotal">0</div></div>
-        <div class="stat-card"><div class="stat-label">Due Today</div><div class="stat-value" id="sDue">0</div></div>
-        <div class="stat-card"><div class="stat-label">Overdue</div><div class="stat-value" id="sOverdue">0</div></div>
-        <div class="stat-card"><div class="stat-label">Sent This Week</div><div class="stat-value" id="sSent">0</div></div>
+        <div class="stat-card"><div class="stat-label">Due Today</div><div class="stat-value amber" id="sDue">0</div></div>
+        <div class="stat-card"><div class="stat-label">Overdue</div><div class="stat-value red" id="sOverdue">0</div></div>
+        <div class="stat-card"><div class="stat-label">Sent This Week</div><div class="stat-value green" id="sSent">0</div></div>
       </div>
       <div class="section-title">Due for Outreach</div>
-      <div id="dueList"></div>
-      <div class="section-title" style="margin-top:28px">Recent Activity</div>
-      <div id="actList"></div>
+      <div id="dueList" class="card" style="margin-bottom:24px"></div>
+      <div class="section-title">Recent Activity</div>
+      <div id="actList" class="card"></div>
     </div>
 
     <!-- CONTACTS -->
-    <div id="view-contacts" class="hidden">
+    <div id="view-contacts" class="view hidden">
       <div class="view-header">
-        <h1 class="section-title" style="margin:0">Contacts</h1>
-        <button class="btn-primary" id="addBtn" style="width:auto">+ Add Contact</button>
+        <h1 class="view-title">Contacts</h1>
+        <div class="view-actions">
+          <button class="btn btn-ghost btn-sm" id="importCsvBtn">↑ Import CSV</button>
+          <input type="file" id="csvFileInput" accept=".csv" class="hidden">
+          <button class="btn btn-primary btn-sm" id="addContactBtn">+ Add Contact</button>
+        </div>
       </div>
       <div class="toolbar">
-        <input class="search-input" id="searchQ" placeholder="Search name or company...">
-        <select id="tierF" style="padding:9px 28px 9px 10px;border:1px solid #E5E0D8;border-radius:8px;font-size:14px;background:#FFF;font-family:inherit">
-          <option value="">All Tiers</option><option value="A">Tier A</option><option value="B">Tier B</option><option value="C">Tier C</option>
-        </select>
-        <select id="statF" style="padding:9px 28px 9px 10px;border:1px solid #E5E0D8;border-radius:8px;font-size:14px;background:#FFF;font-family:inherit">
-          <option value="">All Statuses</option><option value="overdue">Overdue</option><option value="due">Due Soon</option><option value="ok">On Track</option>
-        </select>
+        <input class="search-input" id="ctSearch" placeholder="Search name or company...">
+        <select class="filter-select" id="ctTierF"><option value="">All Tiers</option><option value="A">Tier A</option><option value="B">Tier B</option><option value="C">Tier C</option></select>
+        <select class="filter-select" id="ctStatF"><option value="">All Statuses</option><option value="overdue">Overdue</option><option value="due">Due Soon</option><option value="ok">On Track</option></select>
       </div>
-      <div class="tbl-wrap">
-        <table><thead><tr><th>Name</th><th>Company</th><th>Tier</th><th>Last Contact</th><th>Next Due</th><th>Status</th><th></th></tr></thead>
+      <div class="table-wrap">
+        <table><thead><tr><th>Name</th><th>Company</th><th>Tier</th><th>Priority</th><th>Last Contact</th><th>Status</th><th></th></tr></thead>
         <tbody id="ctBody"></tbody></table>
       </div>
       <div id="ctEmpty" class="empty-state hidden"><strong>No contacts yet</strong>Add your first contact to get started.</div>
     </div>
 
     <!-- QUEUE -->
-    <div id="view-queue" class="hidden">
+    <div id="view-queue" class="view hidden">
       <div class="view-header">
-        <h1 class="section-title" style="margin:0">Outreach Queue</h1>
-        <button class="btn-primary" id="markAllBtn" style="width:auto">Mark All Sent</button>
+        <h1 class="view-title">Outreach Queue</h1>
+        <button class="btn btn-primary btn-sm" id="markAllBtn">✓ Mark All Sent</button>
       </div>
-      <div id="queueList" class="card-list"></div>
-      <div id="queueEmpty" class="empty-state hidden"><strong>Queue is clear</strong>Generate messages from contacts to fill the queue.</div>
+      <div id="queueList" class="card"></div>
+      <div id="queueEmpty" class="empty-state hidden"><strong>Queue is clear</strong>Generate messages from contacts or run a batch to fill it.</div>
     </div>
 
     <!-- DRAFTS -->
-    <div id="view-drafts" class="hidden">
-      <div class="view-header"><h1 class="section-title" style="margin:0">Drafts</h1></div>
-      <div id="draftList" class="card-list"></div>
-      <div id="draftEmpty" class="empty-state hidden"><strong>No drafts</strong>Skipped messages will appear here.</div>
+    <div id="view-drafts" class="view hidden">
+      <div class="view-header"><h1 class="view-title">Drafts</h1></div>
+      <div id="draftList" class="card"></div>
+      <div id="draftEmpty" class="empty-state hidden"><strong>No drafts</strong>Saved messages will appear here.</div>
+    </div>
+
+    <!-- BATCH OUTREACH -->
+    <div id="view-batch" class="view hidden">
+      <div class="view-header"><h1 class="view-title">Batch Outreach</h1></div>
+      <div class="card" style="padding:24px;max-width:680px">
+        <div class="field">
+          <label>What do you want to communicate?</label>
+          <textarea class="batch-prompt-area" id="batchPrompt" placeholder="e.g. Reach out to all contacts with contracts expiring soon&#10;e.g. Follow up with high-priority contacts not contacted in 30 days&#10;e.g. Send invoice reminders to contacts with outstanding balances"></textarea>
+          <div class="batch-hint">Renzo will find matching contacts and generate personalized messages for each one.</div>
+        </div>
+        <div id="batchFilters" style="font-size:13px;color:var(--gray);margin-bottom:16px"></div>
+        <button class="btn btn-primary" id="runBatchBtn">⚡ Generate Batch Messages</button>
+        <div id="batchProgress" class="hidden" style="margin-top:20px">
+          <div class="progress-label" id="batchLabel">Starting...</div>
+          <div class="progress-bar"><div class="progress-fill" id="batchFill" style="width:0%"></div></div>
+        </div>
+        <div id="batchResults" class="hidden" style="margin-top:16px"></div>
+      </div>
     </div>
 
     <!-- SETTINGS -->
-    <div id="view-settings" class="hidden">
-      <h1 class="section-title">Settings</h1>
-      <div id="apiWarn" class="warning-banner hidden">⚠ Add your Anthropic API key to enable AI message generation.</div>
-      <div class="tbl-wrap" style="padding:24px;max-width:560px">
-        <div class="input-group">
+    <div id="view-settings" class="view hidden">
+      <div class="view-header"><h1 class="view-title">Settings</h1></div>
+      <div class="card" style="padding:28px;max-width:560px">
+        <div id="settingsApiWarn" class="api-warn-banner hidden">⚠ Add your Anthropic API key below to enable AI message generation.</div>
+        <div class="field">
           <label>Anthropic API Key</label>
-          <input type="password" id="apiIn" placeholder="sk-ant-...">
-          <div style="font-size:12px;color:#9CA3AF;margin-top:4px">Get yours at <a href="https://console.anthropic.com" target="_blank" style="color:#2D6A4F">console.anthropic.com</a></div>
+          <input type="password" id="settingsKey" placeholder="sk-ant-...">
+          <div class="hint">Get yours at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></div>
         </div>
-        <h3 style="margin:22px 0 14px;font-size:15px;font-weight:600">Company Profile</h3>
-        <div class="input-group"><label>Company Name</label><input type="text" id="sCo"></div>
-        <div class="input-group"><label>What you sell</label><textarea id="sSell" rows="2"></textarea></div>
-        <div class="input-group"><label>Typical customer</label><textarea id="sCust" rows="2"></textarea></div>
-        <div class="form-row">
-          <div class="input-group"><label>Tone</label><select id="sTone"><option>Professional</option><option>Conversational</option><option>Direct</option><option>Warm</option></select></div>
-          <div class="input-group"><label>Your name</label><input type="text" id="sRep"></div>
+        <div style="border-top:1px solid var(--gray-light);margin:24px 0;padding-top:24px">
+          <div style="font-family:'DM Serif Display',serif;font-size:18px;margin-bottom:16px">Company Profile</div>
+          <div class="field"><label>Company Name</label><input type="text" id="sCo"></div>
+          <div class="field"><label>What you sell</label><textarea id="sSell" rows="2"></textarea></div>
+          <div class="field"><label>Typical customer</label><textarea id="sCust" rows="2"></textarea></div>
+          <div class="form-row">
+            <div class="field"><label>Tone</label><select id="sTone"><option>Professional</option><option>Conversational</option><option>Direct</option><option>Warm</option></select></div>
+            <div class="field"><label>Your name</label><input type="text" id="sRep"></div>
+          </div>
+        </div>
+        <div style="border-top:1px solid var(--gray-light);margin:24px 0;padding-top:24px">
+          <div style="font-family:'DM Serif Display',serif;font-size:18px;margin-bottom:8px">My Outreach Rules</div>
+          <p style="font-size:13px;color:var(--gray);margin-bottom:16px">These rules get added to every AI message prompt.</p>
+          <div id="rulesList"></div>
+          <div style="display:flex;gap:10px;margin-top:12px">
+            <input type="text" id="newRuleInput" placeholder="e.g. Always mention our Q3 promotion" style="flex:1;padding:9px 12px;border:1.5px solid var(--gray-light);border-radius:var(--radius-sm);outline:none">
+            <button class="btn btn-ghost btn-sm" id="addRuleBtn">+ Add Rule</button>
+          </div>
         </div>
         <div style="display:flex;align-items:center;gap:14px;margin-top:8px">
-          <button class="btn-primary" id="saveSetBtn" style="width:auto">Save Settings</button>
-          <span id="saveOk" class="success-text hidden">✓ Saved</span>
+          <button class="btn btn-primary" id="saveSettingsBtn">Save Settings</button>
+          <span id="settingsOk" class="hidden" style="color:var(--green);font-size:13px;font-weight:500">✓ Saved</span>
         </div>
       </div>
     </div>
+
   </main>
 </div>
 
-<!-- CONTACT FORM -->
+<!-- CONTACT FORM MODAL -->
 <div id="ctModal" class="modal-overlay hidden">
   <div class="modal-box">
     <div class="modal-header">
       <h2 class="modal-title" id="ctModalTitle">Add Contact</h2>
-      <button class="close-btn" id="ctClose">×</button>
+      <button class="modal-close" id="ctModalClose">×</button>
     </div>
     <input type="hidden" id="ctId">
     <div class="form-row">
-      <div class="input-group"><label>Full Name *</label><input type="text" id="ctName" placeholder="Jane Smith"></div>
-      <div class="input-group"><label>Company *</label><input type="text" id="ctCo" placeholder="Acme Corp"></div>
+      <div class="field"><label>Full Name *</label><input type="text" id="ctName"></div>
+      <div class="field"><label>Company *</label><input type="text" id="ctCo"></div>
     </div>
     <div class="form-row">
-      <div class="input-group"><label>Title</label><input type="text" id="ctTitle" placeholder="VP of Operations"></div>
-      <div class="input-group"><label>Email</label><input type="email" id="ctEmail"></div>
+      <div class="field"><label>Title</label><input type="text" id="ctTitle"></div>
+      <div class="field"><label>Email</label><input type="email" id="ctEmail"></div>
     </div>
     <div class="form-row">
-      <div class="input-group"><label>Phone</label><input type="tel" id="ctPhone"></div>
-      <div class="input-group"><label>Tier *</label>
+      <div class="field"><label>Phone</label><input type="tel" id="ctPhone"></div>
+      <div class="field"><label>Location</label><input type="text" id="ctLoc"></div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>Tier *</label>
         <select id="ctTier" onchange="autoFreq()">
           <option value="">Select...</option>
           <option value="A">A — High Value (weekly)</option>
@@ -283,394 +404,629 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
           <option value="C">C — Lower Value (quarterly)</option>
         </select>
       </div>
+      <div class="field"><label>Touch Frequency (days) *</label><input type="number" id="ctFreq" min="1"></div>
     </div>
     <div class="form-row">
-      <div class="input-group"><label>Touch Frequency (days) *</label><input type="number" id="ctFreq" min="1" placeholder="30"></div>
-      <div class="input-group"><label>Last Contact Date</label><input type="date" id="ctLast"></div>
+      <div class="field"><label>Last Contact Date</label><input type="date" id="ctLast"></div>
+      <div class="field"><label>Contract Expiry</label><input type="date" id="ctExpiry"></div>
     </div>
     <div class="form-row">
-      <div class="input-group"><label>Location/Region</label><input type="text" id="ctLoc" placeholder="New Jersey"></div>
-      <div class="input-group"><label>Account Size</label>
+      <div class="field"><label>Outstanding Invoice ($)</label><input type="number" id="ctInvoice" min="0"></div>
+      <div class="field"><label>Account Size</label>
         <select id="ctSize"><option value="">Select...</option><option>Small</option><option>Mid-Market</option><option>Large</option><option>Enterprise</option></select>
       </div>
     </div>
-    <div class="input-group"><label>Products/Services They Use</label><textarea id="ctProds" rows="2" placeholder="What do they buy or use from you?"></textarea></div>
-    <div class="input-group"><label>Relationship History</label><textarea id="ctHist" rows="4" placeholder="Past conversations, key topics discussed, who has spoken to them, what was agreed..."></textarea></div>
-    <div class="input-group"><label>Notes</label><textarea id="ctNotes" rows="2" placeholder="Anything else relevant..."></textarea></div>
-    <div id="ctErr" class="error-msg hidden">Please fill in all required fields (Name, Company, Tier, Frequency).</div>
-    <div style="display:flex;gap:10px;justify-content:space-between;align-items:center;margin-top:8px;flex-wrap:wrap">
-      <button class="btn-danger btn-sm hidden" id="ctDeleteBtn">Delete Contact</button>
-      <div style="display:flex;gap:10px">
-        <button class="btn-ghost" id="ctCancel">Cancel</button>
-        <button class="btn-primary" id="ctSave" style="width:auto">Save Contact</button>
+    <div class="field"><label>Products/Services They Use</label><textarea id="ctProds" rows="2" placeholder="What do they buy or use from you?"></textarea></div>
+    <div class="field"><label>Relationship History</label><textarea id="ctHist" rows="3" placeholder="Past conversations, key topics, who has spoken to them..."></textarea></div>
+    <div class="field"><label>Notes</label><textarea id="ctNotes" rows="2" placeholder="Anything else relevant..."></textarea></div>
+    <div id="ctFormErr" class="error-text hidden">Please fill in all required fields.</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;flex-wrap:wrap;gap:10px">
+      <button class="btn btn-danger btn-sm hidden" id="ctDeleteBtn">Delete Contact</button>
+      <div style="display:flex;gap:10px;margin-left:auto">
+        <button class="btn btn-ghost" id="ctCancel">Cancel</button>
+        <button class="btn btn-primary" id="ctSave">Save Contact</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- AI MODAL -->
+<!-- AI MESSAGE MODAL -->
 <div id="aiModal" class="modal-overlay hidden">
-  <div class="modal-box" style="max-width:560px">
+  <div class="modal-box" style="max-width:540px">
     <div class="modal-header">
       <h2 class="modal-title" id="aiModalTitle">Generate Message</h2>
-      <button class="close-btn" id="aiClose">×</button>
+      <button class="modal-close" id="aiModalClose">×</button>
     </div>
-    <div id="aiLoad" class="loading-box"><div class="spinner"></div><p>Analyzing relationship context...</p></div>
+    <div id="aiLoading" class="loading-box"><div class="spinner"></div><p>Analyzing relationship context...</p></div>
     <div id="aiResult" class="hidden">
-      <div class="info-box"><div class="info-box-title">Why this message</div><p id="aiReason"></p></div>
-      <div class="input-group"><label>Message (edit freely)</label><textarea id="aiMsg" rows="7"></textarea></div>
-      <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:8px">
-        <button class="btn-ghost" id="aiDraft">Save as Draft</button>
-        <button class="btn-ghost" id="aiRegen">Regenerate</button>
-        <button class="btn-primary" id="aiQueue" style="width:auto">Add to Queue</button>
+      <div class="trigger-box"><div class="trigger-box-label">Why this message</div><p id="aiReason"></p></div>
+      <div class="field"><label>Message — edit before sending</label><textarea class="msg-textarea" id="aiMsg"></textarea></div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost btn-sm" id="aiSaveDraft">Save Draft</button>
+        <button class="btn btn-ghost btn-sm" id="aiRegen">Regenerate</button>
+        <button class="btn btn-ghost btn-sm" id="aiGmail">📧 Gmail Draft</button>
+        <button class="btn btn-primary btn-sm" id="aiQueue">Add to Queue</button>
       </div>
     </div>
-    <div id="aiErr" class="hidden" style="color:#DC2626;font-size:14px;padding:8px 0"></div>
+    <div id="aiError" class="hidden" style="color:var(--red);font-size:14px;padding:8px 0"></div>
   </div>
 </div>
 
 <!-- DELETE CONFIRM -->
 <div id="delModal" class="modal-overlay hidden">
-  <div class="modal-box" style="max-width:380px">
+  <div class="modal-box modal-sm">
     <h3 style="margin-bottom:10px;font-size:18px">Delete Contact?</h3>
-    <p style="color:#6B7280;font-size:14px;margin-bottom:20px">This will permanently delete <strong id="delName"></strong> and all their activity. Cannot be undone.</p>
+    <p style="color:var(--gray);font-size:14px;margin-bottom:20px">This will permanently delete <strong id="delName"></strong> and all their activity. Cannot be undone.</p>
     <div style="display:flex;gap:10px;justify-content:flex-end">
-      <button class="btn-ghost" id="delCancel">Cancel</button>
-      <button class="btn-danger" id="delConfirm">Delete</button>
+      <button class="btn btn-ghost" id="delCancel">Cancel</button>
+      <button class="btn btn-danger" id="delConfirm">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- CSV PREVIEW MODAL -->
+<div id="csvModal" class="modal-overlay hidden">
+  <div class="modal-box" style="max-width:640px">
+    <div class="modal-header">
+      <h2 class="modal-title">Import CSV</h2>
+      <button class="modal-close" id="csvModalClose">×</button>
+    </div>
+    <p style="font-size:13px;color:var(--gray);margin-bottom:12px">Preview of first 5 rows. Renzo auto-detected these columns:</p>
+    <div id="csvMappingArea"></div>
+    <div id="csvPreviewArea"></div>
+    <div id="csvInfo" style="font-size:13px;color:var(--gray);margin-top:10px"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="csvCancel">Cancel</button>
+      <button class="btn btn-primary" id="csvConfirm">Import Contacts</button>
     </div>
   </div>
 </div>
 
 <script>
-// ── Config ──────────────────────────────────────────────────────────────────
-const CREDS  = { admin: 'renzo2024' };
-const K = { contacts:'renzo_contacts', activity:'renzo_activity', queue:'renzo_queue', drafts:'renzo_drafts', profile:'renzo_profile', apiKey:'renzo_api_key', session:'renzo_session', onboarded:'renzo_onboarded' };
-let apiKey = '', currentUser = null, aiContact = null, pendingDelete = null;
+// ── CONSTANTS ────────────────────────────────────────────────────────────────
+const CREDS = { admin: 'renzo2024' };
+const K = {
+  contacts:'renzo_contacts', activity:'renzo_activity', queue:'renzo_queue',
+  drafts:'renzo_drafts', profile:'renzo_profile', apiKey:'renzo_api_key',
+  session:'renzo_session', onboarded:'renzo_onboarded', rules:'renzo_rules'
+};
 
-// ── Storage ─────────────────────────────────────────────────────────────────
-const g  = k => { try { return JSON.parse(localStorage.getItem(k)||'null'); } catch(e) { return null; } };
+// ── STATE ────────────────────────────────────────────────────────────────────
+let currentUser = null, aiContact = null, pendingDelete = null, csvData = null;
+
+// ── STORAGE ──────────────────────────────────────────────────────────────────
+const g  = k => { try { return JSON.parse(localStorage.getItem(k)||'null'); } catch { return null; } };
 const s  = (k,v) => localStorage.setItem(k, JSON.stringify(v));
 const gc = () => g(K.contacts)||[];
 const ga = () => g(K.activity)||[];
 const gq = () => g(K.queue)||[];
 const gd = () => g(K.drafts)||[];
 const gp = () => g(K.profile)||{};
-const id = () => Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const gr = () => g(K.rules)||[];
+const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const esc = t => String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
-// ── Contact helpers ─────────────────────────────────────────────────────────
-function daysOver(c) {
-  if (!c.lastContact) return c.frequency||30;
-  return Math.floor((Date.now()-new Date(c.lastContact))/86400000)-(c.frequency||30);
-}
-function status(c) {
-  const d=daysOver(c);
-  return d>0?{lbl:d+'d overdue',cls:'overdue'}:d>-7?{lbl:'Due soon',cls:'due'}:{lbl:'On track',cls:'ok'};
-}
-function tbadge(t) { return `<span class="badge badge-${(t||'c').toLowerCase()}">Tier ${esc(t||'?')}</span>`; }
-function spill(c)  { const s=status(c); return `<span class="pill pill-${s.cls}">${s.lbl}</span>`; }
-function nextDue(c) {
-  if (!c.lastContact) return 'Never contacted';
-  const d=new Date(c.lastContact); d.setDate(d.getDate()+(c.frequency||30)); return d.toLocaleDateString();
+// ── TOAST ────────────────────────────────────────────────────────────────────
+function toast(msg, type='') {
+  const el = document.createElement('div');
+  el.className = 'toast' + (type ? ' '+type : '');
+  el.textContent = msg;
+  document.getElementById('toastContainer').appendChild(el);
+  setTimeout(() => el.remove(), 3000);
 }
 
-// ── Auth ────────────────────────────────────────────────────────────────────
-function login() {
-  const u=document.getElementById('lu').value.trim(), p=document.getElementById('lp').value;
-  const err=document.getElementById('loginErr');
-  if (CREDS[u]&&CREDS[u]===p) {
-    err.classList.add('hidden'); currentUser=u; s(K.session,u);
-    apiKey=localStorage.getItem(K.apiKey)||'';
+// ── PRIORITY ─────────────────────────────────────────────────────────────────
+function computePriority(c) {
+  let score = 0;
+  const now = Date.now();
+  if (c.lastContact) {
+    const days = Math.floor((now - new Date(c.lastContact)) / 86400000);
+    score += Math.min(days / 90, 1) * 40;
+  } else { score += 40; }
+  if (c.contractExpiry) {
+    const daysUntil = Math.floor((new Date(c.contractExpiry) - now) / 86400000);
+    if (daysUntil < 0) score += 30;
+    else if (daysUntil <= 90) score += (1 - daysUntil/90) * 30;
+  }
+  if (c.invoiceAmount && c.invoiceAmount > 0) score += Math.min(c.invoiceAmount/10000, 1) * 30;
+  return Math.round(Math.min(score, 100));
+}
+
+function computeTrigger(c) {
+  const now = Date.now();
+  let triggers = [];
+  if (c.contractExpiry) {
+    const d = Math.floor((new Date(c.contractExpiry) - now) / 86400000);
+    if (d < 0) triggers.push({ score: 100-d, text: `Contract expired ${Math.abs(d)} days ago` });
+    else if (d <= 90) triggers.push({ score: 90-d, text: `Contract expires in ${d} day${d===1?'':'s'}` });
+  }
+  if (c.invoiceAmount > 0) triggers.push({ score: Math.min(c.invoiceAmount/100, 90), text: `Invoice $${Number(c.invoiceAmount).toLocaleString()} outstanding` });
+  if (c.lastContact) {
+    const d = Math.floor((now - new Date(c.lastContact)) / 86400000);
+    if (d > (c.frequency||30)) triggers.push({ score: d, text: `Not contacted in ${d} days` });
+  } else { triggers.push({ score: 50, text: 'Never been contacted' }); }
+  if (!triggers.length) return 'Regular check-in based on contact schedule';
+  return triggers.sort((a,b) => b.score-a.score)[0].text;
+}
+
+function priorityBadge(score) {
+  const cls = score >= 80 ? 'priority-high' : score >= 50 ? 'priority-med' : 'priority-low';
+  return `<span class="priority-badge ${cls}">${score}</span>`;
+}
+
+function statusInfo(c) {
+  if (!c.lastContact) return { label:'Never contacted', cls:'priority-high' };
+  const d = Math.floor((Date.now()-new Date(c.lastContact))/86400000)-(c.frequency||30);
+  if (d > 0) return { label:`${d}d overdue`, cls:'priority-high' };
+  if (d > -7) return { label:'Due soon', cls:'priority-med' };
+  return { label:'On track', cls:'priority-low' };
+}
+
+// ── AUTH ──────────────────────────────────────────────────────────────────────
+function doLogin() {
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPassword').value;
+  const err = document.getElementById('loginErr');
+  if (CREDS[u] && CREDS[u] === p) {
+    err.classList.add('hidden'); currentUser = u; s(K.session, u);
+    const apiKey = localStorage.getItem(K.apiKey)||'';
     document.getElementById('loginView').classList.add('hidden');
     document.getElementById('appView').classList.remove('hidden');
-    document.getElementById('sidebarUser').textContent=u;
-    g(K.onboarded)?showView('dashboard'):document.getElementById('obModal').classList.remove('hidden');
+    document.getElementById('sidebarUser').textContent = 'Logged in as '+u;
+    if (!apiKey) document.getElementById('apiWarnBanner').classList.remove('hidden');
+    if (!g(K.onboarded)) document.getElementById('onboardModal').classList.remove('hidden');
+    else showView('dashboard');
   } else { err.classList.remove('hidden'); }
 }
 
-function logout() {
-  localStorage.removeItem(K.session); currentUser=null;
+function doLogout() {
+  localStorage.removeItem(K.session); currentUser = null;
   document.getElementById('appView').classList.add('hidden');
   document.getElementById('loginView').classList.remove('hidden');
-  document.getElementById('lu').value=''; document.getElementById('lp').value='';
+  document.getElementById('loginUser').value='';
+  document.getElementById('loginPass').value='';
 }
 
-// ── Onboarding ──────────────────────────────────────────────────────────────
-function saveOb() {
+// ── ONBOARDING ────────────────────────────────────────────────────────────────
+function saveOnboarding() {
   s(K.profile,{company:document.getElementById('obCo').value.trim(),sell:document.getElementById('obSell').value.trim(),customer:document.getElementById('obCust').value.trim(),tone:document.getElementById('obTone').value,repName:document.getElementById('obRep').value.trim()});
-  s(K.onboarded,true); document.getElementById('obModal').classList.add('hidden'); showView('dashboard');
+  s(K.onboarded,true); document.getElementById('onboardModal').classList.add('hidden'); showView('dashboard');
 }
-function skipOb() { s(K.onboarded,true); document.getElementById('obModal').classList.add('hidden'); showView('dashboard'); }
 
-// ── Navigation ──────────────────────────────────────────────────────────────
+// ── NAVIGATION ────────────────────────────────────────────────────────────────
 function showView(name) {
-  ['dashboard','contacts','queue','drafts','settings'].forEach(v=>document.getElementById('view-'+v).classList.add('hidden'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('view-'+name).classList.remove('hidden');
-  document.querySelector(`[data-view="${name}"]`)?.classList.add('active');
-  if(name==='dashboard') renderDash();
-  if(name==='contacts')  renderContacts();
-  if(name==='queue')     renderQueue();
-  if(name==='drafts')    renderDrafts();
-  if(name==='settings')  loadSettings();
+  document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const vEl = document.getElementById('view-'+name);
+  if (vEl) vEl.classList.remove('hidden');
+  const nEl = document.querySelector(`[data-view="${name}"]`);
+  if (nEl) nEl.classList.add('active');
+  if (name==='dashboard') renderDashboard();
+  if (name==='contacts')  renderContacts();
+  if (name==='queue')     renderQueue();
+  if (name==='drafts')    renderDrafts();
+  if (name==='settings')  loadSettings();
+  if (name==='batch')     renderBatch();
+  updateQueueBadge();
 }
 
-// ── Dashboard ───────────────────────────────────────────────────────────────
-function renderDash() {
-  const h=new Date().getHours(), p=gp(), contacts=gc(), activity=ga();
-  const greet=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
-  document.getElementById('greeting').textContent=`${greet}, ${p.repName||'there'}`;
-  document.getElementById('todayDate').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  const wk=new Date(Date.now()-7*86400000);
-  document.getElementById('sTotal').textContent=contacts.length;
-  document.getElementById('sDue').textContent=contacts.filter(c=>{const d=daysOver(c);return d>-3&&d<=0;}).length;
-  document.getElementById('sOverdue').textContent=contacts.filter(c=>daysOver(c)>0).length;
-  document.getElementById('sSent').textContent=activity.filter(a=>new Date(a.ts)>wk).length;
-
-  const due=contacts.filter(c=>daysOver(c)>-3).sort((a,b)=>daysOver(b)-daysOver(a)).slice(0,10);
-  const dueEl=document.getElementById('dueList');
-  dueEl.innerHTML=due.length?'<div class="card-list">'+due.map(c=>`<div class="card-row"><div style="flex:1"><div class="contact-name">${esc(c.name)} ${tbadge(c.tier)}</div><div class="contact-sub">${esc(c.company)} · ${spill(c)}</div></div><button class="btn-primary btn-sm" onclick="openAi('${c.id}')">Generate Message</button></div>`).join('')+'</div>':'<div class="empty-state"><strong>All caught up!</strong>No contacts due right now.</div>';
-
-  const acts=[...activity].reverse().slice(0,8);
-  const actEl=document.getElementById('actList');
-  actEl.innerHTML=acts.length?'<div class="card-list">'+acts.map(a=>`<div class="activity-row"><div class="activity-time">${new Date(a.ts).toLocaleString()}</div><div class="activity-who">${esc(a.cName)} — ${esc(a.co||'')}</div><div class="activity-msg">${esc(a.msg.slice(0,100))}${a.msg.length>100?'…':''}</div></div>`).join('')+'</div>':'<div class="empty-state"><strong>No activity yet</strong>Start reaching out to contacts.</div>';
+function updateQueueBadge() {
+  const count = gq().length;
+  const badge = document.getElementById('queueBadge');
+  badge.textContent = count;
+  badge.classList.toggle('hidden', count === 0);
 }
 
-// ── Contacts ─────────────────────────────────────────────────────────────────
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
+function renderDashboard() {
+  const h = new Date().getHours();
+  const p = gp();
+  document.getElementById('greeting').textContent = (h<12?'Good morning':h<17?'Good afternoon':'Good evening') + ', ' + (p.repName||'there');
+  document.getElementById('todayDate').textContent = new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const contacts = gc(), activity = ga(), wk = new Date(Date.now()-7*86400000);
+  const overdue  = contacts.filter(c=>computePriority(c)>=50);
+  const dueSoon  = contacts.filter(c=>{const d=Math.floor((Date.now()-new Date(c.lastContact||0))/86400000)-(c.frequency||30);return d>-7&&d<=0;});
+  const sentWk   = activity.filter(a=>new Date(a.ts)>wk);
+  document.getElementById('sTotal').textContent   = contacts.length;
+  document.getElementById('sDue').textContent     = dueSoon.length;
+  document.getElementById('sOverdue').textContent = overdue.filter(c=>{const d=Math.floor((Date.now()-new Date(c.lastContact||0))/86400000)-(c.frequency||30);return d>0;}).length;
+  document.getElementById('sSent').textContent    = sentWk.length;
+
+  const sorted = [...contacts].sort((a,b)=>computePriority(b)-computePriority(a)).filter(c=>computePriority(c)>30).slice(0,8);
+  const dueEl = document.getElementById('dueList');
+  if (!sorted.length) { dueEl.innerHTML='<div class="empty-state"><strong>All caught up!</strong>No contacts need attention right now.</div>'; }
+  else dueEl.innerHTML = sorted.map(c=>`<div class="due-item"><div class="due-info"><div class="due-name">${esc(c.name)} ${priorityBadge(computePriority(c))}</div><div class="due-meta">${esc(c.company)} · <em style="color:var(--green)">${esc(computeTrigger(c))}</em></div></div><button class="btn btn-primary btn-xs" onclick="openAi('${c.id}')">Generate</button></div>`).join('');
+
+  const acts = [...activity].reverse().slice(0,8);
+  const actEl = document.getElementById('actList');
+  actEl.innerHTML = acts.length ? '<ul class="activity-list">'+acts.map(a=>`<li class="activity-item"><div class="activity-time">${new Date(a.ts).toLocaleString()}</div><div class="activity-who">${esc(a.cName)} — ${esc(a.co||'')}</div><div class="activity-trigger">${esc(a.trigger||'')}</div><div class="activity-preview">${esc(a.msg.slice(0,100))}${a.msg.length>100?'…':''}</div></li>`).join('')+'</ul>' : '<div class="empty-state"><strong>No activity yet</strong>Start reaching out to contacts.</div>';
+}
+
+// ── CONTACTS ──────────────────────────────────────────────────────────────────
 function renderContacts() {
-  const q=document.getElementById('searchQ').value.toLowerCase(), tf=document.getElementById('tierF').value, sf=document.getElementById('statF').value;
-  let list=gc().filter(c=>{
+  const q=document.getElementById('ctSearch').value.toLowerCase(), tf=document.getElementById('ctTierF').value, sf=document.getElementById('ctStatF').value;
+  let list = gc().filter(c=>{
     if(q&&!c.name.toLowerCase().includes(q)&&!c.company.toLowerCase().includes(q))return false;
     if(tf&&c.tier!==tf)return false;
-    if(sf){const d=daysOver(c);if(sf==='overdue'&&d<=0)return false;if(sf==='due'&&(d>0||d<=-7))return false;if(sf==='ok'&&d>-7)return false;}
+    if(sf){const d=Math.floor((Date.now()-new Date(c.lastContact||0))/86400000)-(c.frequency||30);
+      if(sf==='overdue'&&d<=0)return false;
+      if(sf==='due'&&(d>0||d<=-7))return false;
+      if(sf==='ok'&&d>-7)return false;}
     return true;
-  }).sort((a,b)=>daysOver(b)-daysOver(a));
+  }).sort((a,b)=>computePriority(b)-computePriority(a));
+
   const body=document.getElementById('ctBody'), empty=document.getElementById('ctEmpty');
   if(!list.length){body.innerHTML='';empty.classList.remove('hidden');return;}
   empty.classList.add('hidden');
-  body.innerHTML=list.map(c=>`<tr onclick="openEdit('${c.id}')"><td><strong>${esc(c.name)}</strong></td><td>${esc(c.company)}</td><td>${tbadge(c.tier)}</td><td>${c.lastContact?new Date(c.lastContact).toLocaleDateString():'Never'}</td><td>${nextDue(c)}</td><td>${spill(c)}</td><td onclick="event.stopPropagation()"><button class="btn-ghost btn-sm" onclick="openAi('${c.id}')">Message</button></td></tr>`).join('');
+  const tierBadge = t => `<span class="tier-badge tier-${(t||'c').toLowerCase()}">${t||'?'}</span>`;
+  body.innerHTML = list.map(c=>{
+    const st=statusInfo(c);
+    return `<tr class="clickable" onclick="openEditContact('${c.id}')">
+      <td><strong>${esc(c.name)}</strong></td>
+      <td>${esc(c.company)}</td>
+      <td>${tierBadge(c.tier)}</td>
+      <td>${priorityBadge(computePriority(c))}</td>
+      <td>${c.lastContact?new Date(c.lastContact).toLocaleDateString():'Never'}</td>
+      <td><span class="priority-badge ${st.cls}">${st.label}</span></td>
+      <td onclick="event.stopPropagation()"><button class="btn btn-ghost btn-xs" onclick="openAi('${c.id}')">Message</button></td>
+    </tr>`;
+  }).join('');
 }
 
-// ── Contact Form ─────────────────────────────────────────────────────────────
-function clearForm() {
-  ['ctName','ctCo','ctTitle','ctEmail','ctPhone','ctLoc','ctProds','ctHist','ctNotes'].forEach(x=>document.getElementById(x).value='');
-  document.getElementById('ctTier').value=''; document.getElementById('ctFreq').value='';
-  document.getElementById('ctSize').value=''; document.getElementById('ctLast').value='';
-  document.getElementById('ctId').value=''; document.getElementById('ctErr').classList.add('hidden');
-}
+// ── CONTACT FORM ──────────────────────────────────────────────────────────────
+function clearForm(){['ctName','ctCo','ctTitle','ctEmail','ctPhone','ctLoc','ctProds','ctHist','ctNotes'].forEach(x=>document.getElementById(x).value='');document.getElementById('ctTier').value='';document.getElementById('ctFreq').value='';document.getElementById('ctSize').value='';document.getElementById('ctLast').value='';document.getElementById('ctExpiry').value='';document.getElementById('ctInvoice').value='';document.getElementById('ctId').value='';document.getElementById('ctFormErr').classList.add('hidden');}
 
-function openAdd() {
-  clearForm(); document.getElementById('ctModalTitle').textContent='Add Contact';
-  document.getElementById('ctDeleteBtn').classList.add('hidden');
-  document.getElementById('ctModal').classList.remove('hidden');
-}
+function openAddContact(){clearForm();document.getElementById('ctModalTitle').textContent='Add Contact';document.getElementById('ctDeleteBtn').classList.add('hidden');document.getElementById('ctModal').classList.remove('hidden');}
 
-function openEdit(cid) {
-  const c=gc().find(x=>x.id===cid); if(!c)return;
-  clearForm(); document.getElementById('ctModalTitle').textContent='Edit Contact';
-  document.getElementById('ctId').value=cid;
-  document.getElementById('ctName').value=c.name||''; document.getElementById('ctCo').value=c.company||'';
-  document.getElementById('ctTitle').value=c.title||''; document.getElementById('ctEmail').value=c.email||'';
-  document.getElementById('ctPhone').value=c.phone||''; document.getElementById('ctTier').value=c.tier||'';
-  document.getElementById('ctFreq').value=c.frequency||''; document.getElementById('ctLast').value=c.lastContact||'';
-  document.getElementById('ctLoc').value=c.location||''; document.getElementById('ctSize').value=c.accountSize||'';
-  document.getElementById('ctProds').value=c.products||''; document.getElementById('ctHist').value=c.history||'';
-  document.getElementById('ctNotes').value=c.notes||'';
+function openEditContact(id){
+  const c=gc().find(x=>x.id===id);if(!c)return;
+  clearForm();document.getElementById('ctModalTitle').textContent='Edit Contact';
+  document.getElementById('ctId').value=id;
+  document.getElementById('ctName').value=c.name||'';document.getElementById('ctCo').value=c.company||'';
+  document.getElementById('ctTitle').value=c.title||'';document.getElementById('ctEmail').value=c.email||'';
+  document.getElementById('ctPhone').value=c.phone||'';document.getElementById('ctTier').value=c.tier||'';
+  document.getElementById('ctFreq').value=c.frequency||'';document.getElementById('ctLast').value=c.lastContact||'';
+  document.getElementById('ctLoc').value=c.location||'';document.getElementById('ctSize').value=c.accountSize||'';
+  document.getElementById('ctProds').value=c.products||'';document.getElementById('ctHist').value=c.history||'';
+  document.getElementById('ctNotes').value=c.notes||'';document.getElementById('ctExpiry').value=c.contractExpiry||'';
+  document.getElementById('ctInvoice').value=c.invoiceAmount||'';
   document.getElementById('ctDeleteBtn').classList.remove('hidden');
   document.getElementById('ctModal').classList.remove('hidden');
 }
 
-function autoFreq() {
-  const t=document.getElementById('ctTier').value, f=document.getElementById('ctFreq');
-  if(!f.value) f.value=t==='A'?7:t==='B'?30:t==='C'?90:'';
+function autoFreq(){const t=document.getElementById('ctTier').value,f=document.getElementById('ctFreq');if(!f.value)f.value=t==='A'?7:t==='B'?30:t==='C'?90:'';}
+
+function saveContact(){
+  const name=document.getElementById('ctName').value.trim(),co=document.getElementById('ctCo').value.trim();
+  const tier=document.getElementById('ctTier').value,freq=parseInt(document.getElementById('ctFreq').value);
+  if(!name||!co||!tier||!freq){document.getElementById('ctFormErr').classList.remove('hidden');return;}
+  const data={name,company:co,tier,frequency:freq,title:document.getElementById('ctTitle').value.trim(),email:document.getElementById('ctEmail').value.trim(),phone:document.getElementById('ctPhone').value.trim(),lastContact:document.getElementById('ctLast').value,location:document.getElementById('ctLoc').value.trim(),accountSize:document.getElementById('ctSize').value,products:document.getElementById('ctProds').value.trim(),history:document.getElementById('ctHist').value.trim(),notes:document.getElementById('ctNotes').value.trim(),contractExpiry:document.getElementById('ctExpiry').value,invoiceAmount:parseFloat(document.getElementById('ctInvoice').value)||0};
+  const id=document.getElementById('ctId').value,contacts=gc();
+  if(id){const i=contacts.findIndex(c=>c.id===id);if(i>-1)contacts[i]={...contacts[i],...data};}
+  else contacts.push({id:uid(),createdAt:new Date().toISOString(),...data});
+  s(K.contacts,contacts);document.getElementById('ctModal').classList.add('hidden');
+  renderContacts();toast('Contact saved','success');
 }
 
-function saveContact() {
-  const name=document.getElementById('ctName').value.trim(), co=document.getElementById('ctCo').value.trim();
-  const tier=document.getElementById('ctTier').value, freq=parseInt(document.getElementById('ctFreq').value);
-  if(!name||!co||!tier||!freq){document.getElementById('ctErr').classList.remove('hidden');return;}
-  const data={name,company:co,tier,frequency:freq,title:document.getElementById('ctTitle').value.trim(),email:document.getElementById('ctEmail').value.trim(),phone:document.getElementById('ctPhone').value.trim(),lastContact:document.getElementById('ctLast').value,location:document.getElementById('ctLoc').value.trim(),accountSize:document.getElementById('ctSize').value,products:document.getElementById('ctProds').value.trim(),history:document.getElementById('ctHist').value.trim(),notes:document.getElementById('ctNotes').value.trim()};
-  const cid=document.getElementById('ctId').value, contacts=gc();
-  if(cid){const i=contacts.findIndex(c=>c.id===cid);if(i>-1)contacts[i]={...contacts[i],...data};}
-  else contacts.push({id:id(),createdAt:new Date().toISOString(),...data});
-  s(K.contacts,contacts); document.getElementById('ctModal').classList.add('hidden'); renderContacts();
-}
+function openDelete(){const id=document.getElementById('ctId').value,c=gc().find(x=>x.id===id);if(!c)return;pendingDelete=id;document.getElementById('delName').textContent=c.name;document.getElementById('delModal').classList.remove('hidden');}
 
-function openDelete() {
-  const cid=document.getElementById('ctId').value, c=gc().find(x=>x.id===cid); if(!c)return;
-  pendingDelete=cid; document.getElementById('delName').textContent=c.name;
-  document.getElementById('delModal').classList.remove('hidden');
-}
-
-function doDelete() {
+function doDelete(){
   if(!pendingDelete)return;
   s(K.contacts,gc().filter(c=>c.id!==pendingDelete));
   s(K.activity,ga().filter(a=>a.cId!==pendingDelete));
   s(K.queue,gq().filter(q=>q.cId!==pendingDelete));
   s(K.drafts,gd().filter(d=>d.cId!==pendingDelete));
-  pendingDelete=null;
-  document.getElementById('delModal').classList.add('hidden');
-  document.getElementById('ctModal').classList.add('hidden');
-  renderContacts();
+  pendingDelete=null;document.getElementById('delModal').classList.add('hidden');document.getElementById('ctModal').classList.add('hidden');
+  renderContacts();toast('Contact deleted');
 }
 
-// ── AI Message ───────────────────────────────────────────────────────────────
-function openAi(cid) {
-  const c=gc().find(x=>x.id===cid); if(!c)return;
-  aiContact=c;
-  document.getElementById('aiModalTitle').textContent='Message for '+c.name;
-  document.getElementById('aiLoad').classList.remove('hidden');
+// ── AI MESSAGES ───────────────────────────────────────────────────────────────
+function openAi(id){
+  const c=gc().find(x=>x.id===id);if(!c)return;
+  aiContact=c;document.getElementById('aiModalTitle').textContent='Message for '+c.name;
+  document.getElementById('aiLoading').classList.remove('hidden');
   document.getElementById('aiResult').classList.add('hidden');
-  document.getElementById('aiErr').classList.add('hidden');
+  document.getElementById('aiError').classList.add('hidden');
   document.getElementById('aiModal').classList.remove('hidden');
   generateMsg(c);
 }
 
-async function generateMsg(c) {
-  const key=apiKey||localStorage.getItem(K.apiKey)||'';
-  if(!key){document.getElementById('aiLoad').classList.add('hidden');document.getElementById('aiErr').classList.remove('hidden');document.getElementById('aiErr').textContent='No API key set. Go to Settings to add your Anthropic API key.';return;}
-  const p=gp(), days=c.lastContact?Math.floor((Date.now()-new Date(c.lastContact))/86400000):null;
-  const td=c.tier==='A'?'top priority, contact weekly':c.tier==='B'?'mid-value, contact monthly':'lower priority, contact quarterly';
-  const prompt=`Write a personalized outreach message from ${p.repName||'a rep'} at ${p.company||'our company'}.\n\nCOMPANY: What we sell: ${p.sell||'our products'}. Typical customer: ${p.customer||'businesses'}. Tone: ${p.tone||'Professional'}.\n\nCONTACT: Name: ${c.name}. Company: ${c.company}. Title: ${c.title||'unknown'}. Tier: ${c.tier} (${td}). Location: ${c.location||'unknown'}. Account size: ${c.accountSize||'unknown'}. Days since last contact: ${days!==null?days:'never contacted'}. Products they use: ${c.products||'none noted'}. Relationship history: ${c.history||'none'}. Notes: ${c.notes||'none'}.\n\nWrite a SHORT (3-5 sentence), genuine, personalized message. Sound like a real person who knows this contact. Reference their specific situation where possible. Never start with "I hope this finds you well."\n\nReturn ONLY valid JSON: {"reason":"2 sentence explanation of why you wrote this specific message","message":"the outreach message text"}`;
-  try {
+async function generateMsg(c){
+  const key=localStorage.getItem(K.apiKey)||'';
+  if(!key){document.getElementById('aiLoading').classList.add('hidden');document.getElementById('aiError').classList.remove('hidden');document.getElementById('aiError').textContent='No API key set. Go to Settings to add your Anthropic API key.';return;}
+  const p=gp(),rules=gr();
+  const days=c.lastContact?Math.floor((Date.now()-new Date(c.lastContact))/86400000):null;
+  const trigger=computeTrigger(c);
+  const tierDesc=c.tier==='A'?'top priority, contact weekly':c.tier==='B'?'mid-value, contact monthly':'lower priority, contact quarterly';
+  const rulesStr=rules.length?'\n\nAdditional instructions: '+rules.join('. '):'';
+
+  const prompt=`You are writing a personalized outreach message from ${p.repName||'a rep'} at ${p.company||'our company'}.
+
+COMPANY: What we sell: ${p.sell||'our products'}. Typical customer: ${p.customer||'businesses'}. Tone: ${p.tone||'Professional'}.
+
+CONTACT:
+- Name: ${c.name}, Company: ${c.company}, Title: ${c.title||'unknown'}
+- Tier: ${c.tier} (${tierDesc})
+- Last contacted: ${days!==null?days+' days ago':'never'}
+- Location: ${c.location||'unknown'}, Account: ${c.accountSize||'unknown'}
+- Products they use: ${c.products||'none noted'}
+- Relationship history: ${c.history||'none'}
+- Notes: ${c.notes||'none'}
+
+OUTREACH TRIGGER (the main reason to reach out now): ${trigger}
+
+Write a SHORT (3-5 sentences), genuine, personalized message. Reference the trigger reason naturally. Sound like a real person who knows this contact well. Do NOT start with "I hope this finds you well."${rulesStr}
+
+Return ONLY valid JSON: {"reason":"2 sentence explanation of why you wrote this specific message and what the trigger was","message":"the outreach message text"}`;
+
+  try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:500,messages:[{role:'user',content:prompt}]})});
     if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'API error '+res.status);}
-    const data=await res.json(); let txt=data.content[0].text.trim();
+    const data=await res.json();let txt=data.content[0].text.trim();
     if(txt.startsWith('```'))txt=txt.split('\n').slice(1,-1).join('\n');
     const parsed=JSON.parse(txt);
     document.getElementById('aiReason').textContent=parsed.reason;
     document.getElementById('aiMsg').value=parsed.message;
-    document.getElementById('aiLoad').classList.add('hidden');
+    document.getElementById('aiLoading').classList.add('hidden');
     document.getElementById('aiResult').classList.remove('hidden');
-  } catch(e) {
-    document.getElementById('aiLoad').classList.add('hidden');
-    document.getElementById('aiErr').classList.remove('hidden');
-    document.getElementById('aiErr').textContent='Failed: '+e.message;
-  }
+  }catch(e){document.getElementById('aiLoading').classList.add('hidden');document.getElementById('aiError').classList.remove('hidden');document.getElementById('aiError').textContent='Generation failed: '+e.message;}
 }
 
-function addToQueue() {
-  const msg=document.getElementById('aiMsg').value.trim(), reason=document.getElementById('aiReason').textContent;
+function addToQueue(){
+  const msg=document.getElementById('aiMsg').value.trim(),reason=document.getElementById('aiReason').textContent;
   if(!msg||!aiContact)return;
-  s(K.queue,[...gq(),{id:id(),cId:aiContact.id,cName:aiContact.name,co:aiContact.company,msg,reason,added:new Date().toISOString()}]);
-  document.getElementById('aiModal').classList.add('hidden'); aiContact=null; showView('queue');
+  const trigger=computeTrigger(aiContact);
+  s(K.queue,[...gq(),{id:uid(),cId:aiContact.id,cName:aiContact.name,co:aiContact.company,msg,reason,trigger,added:new Date().toISOString()}]);
+  document.getElementById('aiModal').classList.add('hidden');aiContact=null;
+  updateQueueBadge();showView('queue');toast('Added to queue','success');
 }
 
-function saveDraft() {
-  const msg=document.getElementById('aiMsg').value.trim(), reason=document.getElementById('aiReason').textContent;
+function saveDraft(){
+  const msg=document.getElementById('aiMsg').value.trim(),reason=document.getElementById('aiReason').textContent;
   if(!msg||!aiContact)return;
-  s(K.drafts,[...gd(),{id:id(),cId:aiContact.id,cName:aiContact.name,co:aiContact.company,msg,reason,saved:new Date().toISOString()}]);
-  document.getElementById('aiModal').classList.add('hidden'); aiContact=null;
+  s(K.drafts,[...gd(),{id:uid(),cId:aiContact.id,cName:aiContact.name,co:aiContact.company,msg,reason,saved:new Date().toISOString()}]);
+  document.getElementById('aiModal').classList.add('hidden');aiContact=null;toast('Saved to drafts');
 }
 
-// ── Queue ────────────────────────────────────────────────────────────────────
-function renderQueue() {
-  const q=gq(), list=document.getElementById('queueList'), empty=document.getElementById('queueEmpty');
+function openGmailDraft(){
+  const msg=document.getElementById('aiMsg').value.trim(),c=aiContact;
+  if(!msg||!c)return;
+  const subject=`Following up — ${c.company}`;
+  const mailto=`mailto:${c.email||''}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(msg)}`;
+  window.open(mailto,'_blank');
+}
+
+// ── QUEUE ─────────────────────────────────────────────────────────────────────
+function renderQueue(){
+  const q=gq(),list=document.getElementById('queueList'),empty=document.getElementById('queueEmpty');
   if(!q.length){list.innerHTML='';empty.classList.remove('hidden');return;}
   empty.classList.add('hidden');
-  list.innerHTML=q.map(item=>`<div class="queue-item"><div class="queue-who">${esc(item.cName)}</div><div class="queue-co">${esc(item.co)}</div><div class="queue-why">💡 ${esc(item.reason)}</div><div class="queue-msg">${esc(item.msg)}</div><div class="queue-actions"><button class="btn-primary btn-sm" onclick="markSent('${item.id}')">✓ Mark Sent</button><button class="btn-ghost btn-sm" onclick="editInQueue('${item.id}')">Edit</button><button class="btn-ghost btn-sm" onclick="removeQ('${item.id}')">Remove</button></div></div>`).join('');
+  list.innerHTML=q.map(item=>`<div class="queue-item"><div class="queue-who">${esc(item.cName)}</div><div class="queue-co">${esc(item.co)}</div>${item.trigger?`<div class="queue-trigger">💡 ${esc(item.trigger)}</div>`:''}<div class="queue-preview">${esc(item.msg)}</div><div class="queue-actions"><button class="btn btn-primary btn-xs" onclick="markSent('${item.id}')">✓ Mark Sent</button><button class="btn btn-ghost btn-xs" onclick="editFromQueue('${item.id}')">Edit</button><button class="btn btn-ghost btn-xs" onclick="removeQ('${item.id}')">Remove</button></div></div>`).join('');
 }
 
-function markSent(qid) {
-  const q=gq(), item=q.find(x=>x.id===qid); if(!item)return;
-  s(K.activity,[...ga(),{id:id(),cId:item.cId,cName:item.cName,co:item.co,msg:item.msg,reason:item.reason,ts:new Date().toISOString()}]);
-  const cts=gc(), i=cts.findIndex(c=>c.id===item.cId); if(i>-1)cts[i].lastContact=new Date().toISOString().split('T')[0];
-  s(K.contacts,cts); s(K.queue,q.filter(x=>x.id!==qid)); renderQueue();
+function markSent(qid){
+  const q=gq(),item=q.find(x=>x.id===qid);if(!item)return;
+  const act=[...ga(),{id:uid(),cId:item.cId,cName:item.cName,co:item.co,msg:item.msg,trigger:item.trigger,reason:item.reason,ts:new Date().toISOString()}];
+  s(K.activity,act);
+  const cts=gc(),i=cts.findIndex(c=>c.id===item.cId);if(i>-1)cts[i].lastContact=new Date().toISOString().split('T')[0];
+  s(K.contacts,cts);s(K.queue,q.filter(x=>x.id!==qid));
+  renderQueue();updateQueueBadge();toast('Marked as sent','success');
 }
 
-function markAllSent() {
-  gq().forEach(item=>{
-    s(K.activity,[...ga(),{id:id(),cId:item.cId,cName:item.cName,co:item.co,msg:item.msg,reason:item.reason,ts:new Date().toISOString()}]);
-    const cts=gc(), i=cts.findIndex(c=>c.id===item.cId); if(i>-1)cts[i].lastContact=new Date().toISOString().split('T')[0]; s(K.contacts,cts);
-  });
-  s(K.queue,[]); renderQueue();
-}
+function markAllSent(){gq().forEach(item=>markSent(item.id));toast('All marked as sent','success');}
 
-function editInQueue(qid) {
-  const item=gq().find(x=>x.id===qid); if(!item)return;
-  const c=gc().find(x=>x.id===item.cId); if(!c)return;
-  aiContact=c;
-  document.getElementById('aiReason').textContent=item.reason;
-  document.getElementById('aiMsg').value=item.msg;
-  document.getElementById('aiLoad').classList.add('hidden');
-  document.getElementById('aiResult').classList.remove('hidden');
-  document.getElementById('aiErr').classList.add('hidden');
+function editFromQueue(qid){
+  const item=gq().find(x=>x.id===qid);if(!item)return;
+  const c=gc().find(x=>x.id===item.cId);if(!c)return;
+  aiContact=c;document.getElementById('aiReason').textContent=item.reason||'';document.getElementById('aiMsg').value=item.msg;
+  document.getElementById('aiLoading').classList.add('hidden');document.getElementById('aiResult').classList.remove('hidden');document.getElementById('aiError').classList.add('hidden');
   document.getElementById('aiModal').classList.remove('hidden');
-  s(K.queue,gq().filter(x=>x.id!==qid));
+  s(K.queue,gq().filter(x=>x.id!==qid));updateQueueBadge();
 }
 
-function removeQ(qid) { s(K.queue,gq().filter(x=>x.id!==qid)); renderQueue(); }
+function removeQ(qid){s(K.queue,gq().filter(x=>x.id!==qid));renderQueue();updateQueueBadge();}
 
-// ── Drafts ───────────────────────────────────────────────────────────────────
-function renderDrafts() {
-  const drafts=gd(), list=document.getElementById('draftList'), empty=document.getElementById('draftEmpty');
+// ── DRAFTS ────────────────────────────────────────────────────────────────────
+function renderDrafts(){
+  const drafts=gd(),list=document.getElementById('draftList'),empty=document.getElementById('draftEmpty');
   if(!drafts.length){list.innerHTML='';empty.classList.remove('hidden');return;}
   empty.classList.add('hidden');
-  list.innerHTML=drafts.map(d=>`<div class="queue-item"><div class="queue-who">${esc(d.cName)}</div><div class="queue-co">${esc(d.co)} · ${new Date(d.saved).toLocaleDateString()}</div><div class="queue-msg">${esc(d.msg.slice(0,120))}${d.msg.length>120?'…':''}</div><div class="queue-actions"><button class="btn-primary btn-sm" onclick="draftToQueue('${d.id}')">Move to Queue</button><button class="btn-ghost btn-sm" onclick="removeDraft('${d.id}')">Remove</button></div></div>`).join('');
+  list.innerHTML=drafts.map(d=>`<div class="queue-item"><div class="queue-who">${esc(d.cName)}</div><div class="queue-co">${esc(d.co)} · ${new Date(d.saved).toLocaleDateString()}</div><div class="queue-preview">${esc(d.msg.slice(0,120))}${d.msg.length>120?'…':''}</div><div class="queue-actions"><button class="btn btn-primary btn-xs" onclick="draftToQueue('${d.id}')">Move to Queue</button><button class="btn btn-ghost btn-xs" onclick="removeDraft('${d.id}')">Remove</button></div></div>`).join('');
 }
 
-function draftToQueue(did) {
-  const drafts=gd(), item=drafts.find(x=>x.id===did); if(!item)return;
-  s(K.queue,[...gq(),{...item,added:new Date().toISOString()}]);
-  s(K.drafts,drafts.filter(x=>x.id!==did)); renderDrafts();
+function draftToQueue(did){const drafts=gd(),item=drafts.find(x=>x.id===did);if(!item)return;s(K.queue,[...gq(),{...item,added:new Date().toISOString()}]);s(K.drafts,drafts.filter(x=>x.id!==did));renderDrafts();updateQueueBadge();toast('Moved to queue');}
+function removeDraft(did){s(K.drafts,gd().filter(x=>x.id!==did));renderDrafts();}
+
+// ── BATCH OUTREACH ────────────────────────────────────────────────────────────
+function renderBatch(){document.getElementById('batchProgress').classList.add('hidden');document.getElementById('batchResults').classList.add('hidden');}
+
+async function runBatch(){
+  const query=document.getElementById('batchPrompt').value.trim();
+  if(!query){toast('Please enter a prompt first','error');return;}
+  const contacts=gc();
+  const lower=query.toLowerCase();
+  let filtered=contacts.filter(c=>{
+    if(lower.includes('contract')||lower.includes('expir')||lower.includes('renew')){if(!c.contractExpiry)return false;const d=Math.floor((new Date(c.contractExpiry)-Date.now())/86400000);return d<=90;}
+    if(lower.includes('invoice')||lower.includes('overdue')||lower.includes('balance')){return c.invoiceAmount>0;}
+    if(lower.includes('not contacted')||lower.includes('follow up')||lower.includes('touch')){const d=Math.floor((Date.now()-new Date(c.lastContact||0))/86400000);return d>(c.frequency||30);}
+    if(lower.includes('priority')||lower.includes('high')){return computePriority(c)>=70;}
+    return computePriority(c)>40;
+  }).sort((a,b)=>computePriority(b)-computePriority(a)).slice(0,15);
+
+  if(!filtered.length){toast('No contacts match that criteria','error');return;}
+  const key=localStorage.getItem(K.apiKey)||'';
+  if(!key){toast('No API key set. Go to Settings.','error');return;}
+
+  document.getElementById('batchProgress').classList.remove('hidden');
+  document.getElementById('batchResults').classList.add('hidden');
+  document.getElementById('runBatchBtn').disabled=true;
+
+  let generated=0,failed=0;
+  for(let i=0;i<filtered.length;i++){
+    const c=filtered[i];
+    document.getElementById('batchLabel').textContent=`Generating ${i+1} of ${filtered.length}: ${c.name}...`;
+    document.getElementById('batchFill').style.width=((i/filtered.length)*100)+'%';
+    try{
+      const p=gp(),rules=gr(),days=c.lastContact?Math.floor((Date.now()-new Date(c.lastContact))/86400000):null,trigger=computeTrigger(c);
+      const rulesStr=rules.length?'\n\nAdditional instructions: '+rules.join('. '):'';
+      const prompt=`Write a brief personalized outreach message from ${p.repName||'a rep'} at ${p.company||'our company'}. Contact: ${c.name} at ${c.company}. Trigger: ${trigger}. Tone: ${p.tone||'Professional'}.${rulesStr}\n\nReturn JSON: {"reason":"why","message":"the message"}`;
+      const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:400,messages:[{role:'user',content:prompt}]})});
+      if(res.ok){
+        const data=await res.json();let txt=data.content[0].text.trim();
+        if(txt.startsWith('```'))txt=txt.split('\n').slice(1,-1).join('\n');
+        const parsed=JSON.parse(txt);
+        s(K.queue,[...gq(),{id:uid(),cId:c.id,cName:c.name,co:c.company,msg:parsed.message,reason:parsed.reason,trigger,added:new Date().toISOString()}]);
+        generated++;
+      } else { failed++; }
+    }catch{failed++;}
+    await new Promise(r=>setTimeout(r,300));
+  }
+
+  document.getElementById('batchFill').style.width='100%';
+  document.getElementById('batchLabel').textContent='Complete!';
+  document.getElementById('runBatchBtn').disabled=false;
+  document.getElementById('batchResults').classList.remove('hidden');
+  document.getElementById('batchResults').innerHTML=`<div style="background:var(--green-pale);border-left:4px solid var(--green);padding:14px 16px;border-radius:4px;font-size:14px;color:#1B4332"><strong>Batch complete:</strong> Generated ${generated} message${generated!==1?'s':''} and added to queue.${failed?` ${failed} failed.`:''}</div>`;
+  updateQueueBadge();toast(`${generated} messages added to queue`,'success');
 }
 
-function removeDraft(did) { s(K.drafts,gd().filter(x=>x.id!==did)); renderDrafts(); }
+// ── CSV IMPORT ────────────────────────────────────────────────────────────────
+function parseCSV(text){
+  const lines=text.split('\n').filter(l=>l.trim());
+  if(lines.length<2)return null;
+  const parseRow=row=>{const fields=[];let cur='',inQ=false;for(let i=0;i<row.length;i++){const c=row[i];if(c==='"'){inQ=!inQ;}else if(c===','&&!inQ){fields.push(cur.trim());cur='';}else{cur+=c;}}fields.push(cur.trim());return fields;};
+  const headers=parseRow(lines[0]).map(h=>h.replace(/^"|"$/g,'').trim().toLowerCase());
+  const rows=lines.slice(1).map(l=>parseRow(l).map(v=>v.replace(/^"|"$/g,'').trim()));
+  return{headers,rows};
+}
 
-// ── Settings ─────────────────────────────────────────────────────────────────
-function loadSettings() {
-  const key=localStorage.getItem(K.apiKey)||'', p=gp();
-  document.getElementById('apiIn').value=key;
-  document.getElementById('sCo').value=p.company||''; document.getElementById('sSell').value=p.sell||'';
-  document.getElementById('sCust').value=p.customer||''; document.getElementById('sTone').value=p.tone||'Professional';
+function detectColumn(headers,candidates){return headers.findIndex(h=>candidates.some(c=>h.includes(c)));}
+
+function handleCSVFile(file){
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const result=parseCSV(e.target.result);
+    if(!result||!result.rows.length){toast('Could not parse CSV','error');return;}
+    csvData=result;
+    const {headers,rows}=result;
+    const nameIdx=detectColumn(headers,['name','full name','contact']);
+    const coIdx=detectColumn(headers,['company','organization','account','employer']);
+    const emailIdx=detectColumn(headers,['email','e-mail','mail']);
+    const phoneIdx=detectColumn(headers,['phone','tel','mobile','cell']);
+    const mappingEl=document.getElementById('csvMappingArea');
+    mappingEl.innerHTML=`<div style="font-size:13px;margin-bottom:12px"><strong>Detected columns:</strong> Name→${nameIdx>=0?headers[nameIdx]:'not found'}, Company→${coIdx>=0?headers[coIdx]:'not found'}, Email→${emailIdx>=0?headers[emailIdx]:'not found'}, Phone→${phoneIdx>=0?headers[phoneIdx]:'not found'}</div>`;
+    csvData.mapping={name:nameIdx,company:coIdx,email:emailIdx,phone:phoneIdx};
+    const preview=rows.slice(0,5);
+    document.getElementById('csvPreviewArea').innerHTML=`<div style="overflow-x:auto"><table class="csv-preview-table"><thead><tr>${headers.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${preview.map(r=>`<tr>${r.map(v=>`<td>${esc(v)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+    document.getElementById('csvInfo').textContent=`${rows.length} rows found · Importing up to ${rows.length} contacts`;
+    document.getElementById('csvModal').classList.remove('hidden');
+  };
+  reader.readAsText(file);
+}
+
+function confirmCSVImport(){
+  if(!csvData)return;
+  const {headers,rows,mapping}=csvData;
+  const contacts=gc();let imported=0,skipped=0;
+  rows.forEach(row=>{
+    const name=mapping.name>=0?row[mapping.name]:'';
+    const co=mapping.company>=0?row[mapping.company]:'';
+    if(!name&&!co){skipped++;return;}
+    if(contacts.find(c=>c.name===name&&c.company===co)){skipped++;return;}
+    contacts.push({id:uid(),name:name||'Unknown',company:co||'Unknown',email:mapping.email>=0?row[mapping.email]:'',phone:mapping.phone>=0?row[mapping.phone]:'',tier:'C',frequency:90,createdAt:new Date().toISOString(),invoiceAmount:0});
+    imported++;
+  });
+  s(K.contacts,contacts);csvData=null;document.getElementById('csvModal').classList.add('hidden');
+  renderContacts();toast(`Imported ${imported} contacts, skipped ${skipped}`,'success');
+}
+
+// ── SETTINGS ──────────────────────────────────────────────────────────────────
+function loadSettings(){
+  const key=localStorage.getItem(K.apiKey)||'',p=gp();
+  document.getElementById('settingsKey').value=key;
+  document.getElementById('sCo').value=p.company||'';document.getElementById('sSell').value=p.sell||'';
+  document.getElementById('sCust').value=p.customer||'';document.getElementById('sTone').value=p.tone||'Professional';
   document.getElementById('sRep').value=p.repName||'';
-  document.getElementById('apiWarn').classList[key?'add':'remove']('hidden');
-  document.getElementById('saveOk').classList.add('hidden');
+  document.getElementById('settingsApiWarn').classList[key?'add':'remove']('hidden');
+  document.getElementById('settingsOk').classList.add('hidden');
+  renderRules();
 }
 
-function saveSettings() {
-  const key=document.getElementById('apiIn').value.trim();
-  localStorage.setItem(K.apiKey,key); apiKey=key;
+function saveSettings(){
+  const key=document.getElementById('settingsKey').value.trim();
+  localStorage.setItem(K.apiKey,key);
   s(K.profile,{company:document.getElementById('sCo').value.trim(),sell:document.getElementById('sSell').value.trim(),customer:document.getElementById('sCust').value.trim(),tone:document.getElementById('sTone').value,repName:document.getElementById('sRep').value.trim()});
-  document.getElementById('apiWarn').classList[key?'add':'remove']('hidden');
-  document.getElementById('saveOk').classList.remove('hidden');
-  setTimeout(()=>document.getElementById('saveOk').classList.add('hidden'),2000);
+  document.getElementById('settingsApiWarn').classList[key?'add':'remove']('hidden');
+  document.getElementById('settingsOk').classList.remove('hidden');
+  setTimeout(()=>document.getElementById('settingsOk').classList.add('hidden'),2000);
+  toast('Settings saved','success');
 }
 
-// ── Events ────────────────────────────────────────────────────────────────────
-document.getElementById('loginBtn').onclick=login;
-document.getElementById('lu').onkeydown=e=>e.key==='Enter'&&login();
-document.getElementById('lp').onkeydown=e=>e.key==='Enter'&&login();
-document.getElementById('logoutBtn').onclick=logout;
-document.getElementById('obSave').onclick=saveOb;
-document.getElementById('obSkip').onclick=skipOb;
-document.getElementById('obSkip2').onclick=skipOb;
+// ── RULES ─────────────────────────────────────────────────────────────────────
+function renderRules(){
+  const rules=gr(),el=document.getElementById('rulesList');
+  el.innerHTML=rules.length?rules.map((r,i)=>`<div class="rule-item"><span class="rule-text">${esc(r)}</span><button class="rule-delete" onclick="deleteRule(${i})">×</button></div>`).join(''):'<p style="font-size:13px;color:var(--gray)">No rules yet. Add your first rule above.</p>';
+}
+
+function addRule(){const input=document.getElementById('newRuleInput'),val=input.value.trim();if(!val)return;s(K.rules,[...gr(),val]);input.value='';renderRules();}
+function deleteRule(i){const rules=gr();rules.splice(i,1);s(K.rules,rules);renderRules();}
+
+// ── EVENT LISTENERS ───────────────────────────────────────────────────────────
+document.getElementById('loginBtn').onclick=doLogin;
+document.getElementById('loginPass').onkeydown=e=>e.key==='Enter'&&doLogin();
+document.getElementById('loginUser').onkeydown=e=>e.key==='Enter'&&doLogin();
+document.getElementById('logoutBtn').onclick=doLogout;
+document.getElementById('obSave').onclick=saveOnboarding;
+document.getElementById('obSkip').onclick=()=>{s(K.onboarded,true);document.getElementById('onboardModal').classList.add('hidden');showView('dashboard');};
 document.querySelectorAll('.nav-item').forEach(n=>n.addEventListener('click',()=>showView(n.dataset.view)));
-document.getElementById('addBtn').onclick=openAdd;
+document.getElementById('addContactBtn').onclick=openAddContact;
 document.getElementById('ctSave').onclick=saveContact;
 document.getElementById('ctCancel').onclick=()=>document.getElementById('ctModal').classList.add('hidden');
-document.getElementById('ctClose').onclick=()=>document.getElementById('ctModal').classList.add('hidden');
+document.getElementById('ctModalClose').onclick=()=>document.getElementById('ctModal').classList.add('hidden');
 document.getElementById('ctDeleteBtn').onclick=openDelete;
 document.getElementById('delConfirm').onclick=doDelete;
 document.getElementById('delCancel').onclick=()=>document.getElementById('delModal').classList.add('hidden');
-document.getElementById('aiClose').onclick=()=>{document.getElementById('aiModal').classList.add('hidden');aiContact=null;};
+document.getElementById('aiModalClose').onclick=()=>{document.getElementById('aiModal').classList.add('hidden');aiContact=null;};
 document.getElementById('aiQueue').onclick=addToQueue;
-document.getElementById('aiDraft').onclick=saveDraft;
-document.getElementById('aiRegen').onclick=()=>{if(!aiContact)return;document.getElementById('aiLoad').classList.remove('hidden');document.getElementById('aiResult').classList.add('hidden');generateMsg(aiContact);};
+document.getElementById('aiSaveDraft').onclick=saveDraft;
+document.getElementById('aiGmail').onclick=openGmailDraft;
+document.getElementById('aiRegen').onclick=()=>{if(!aiContact)return;document.getElementById('aiLoading').classList.remove('hidden');document.getElementById('aiResult').classList.add('hidden');generateMsg(aiContact);};
 document.getElementById('markAllBtn').onclick=markAllSent;
-document.getElementById('saveSetBtn').onclick=saveSettings;
-document.getElementById('searchQ').oninput=renderContacts;
-document.getElementById('tierF').onchange=renderContacts;
-document.getElementById('statF').onchange=renderContacts;
-['ctModal','aiModal','delModal','obModal'].forEach(id=>{
+document.getElementById('saveSettingsBtn').onclick=saveSettings;
+document.getElementById('addRuleBtn').onclick=addRule;
+document.getElementById('newRuleInput').onkeydown=e=>e.key==='Enter'&&addRule();
+document.getElementById('ctSearch').oninput=renderContacts;
+document.getElementById('ctTierF').onchange=renderContacts;
+document.getElementById('ctStatF').onchange=renderContacts;
+document.getElementById('importCsvBtn').onclick=()=>document.getElementById('csvFileInput').click();
+document.getElementById('csvFileInput').onchange=e=>handleCSVFile(e.target.files[0]);
+document.getElementById('csvConfirm').onclick=confirmCSVImport;
+document.getElementById('csvCancel').onclick=()=>document.getElementById('csvModal').classList.add('hidden');
+document.getElementById('csvModalClose').onclick=()=>document.getElementById('csvModal').classList.add('hidden');
+document.getElementById('runBatchBtn').onclick=runBatch;
+
+// Close modals on overlay click + ESC
+['ctModal','aiModal','delModal','onboardModal','csvModal'].forEach(id=>{
   document.getElementById(id).addEventListener('click',function(e){if(e.target===this)this.classList.add('hidden');});
 });
-document.addEventListener('keydown',e=>{if(e.key==='Escape')['ctModal','aiModal','delModal','obModal'].forEach(id=>document.getElementById(id).classList.add('hidden'));});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')['ctModal','aiModal','delModal','onboardModal','csvModal'].forEach(id=>document.getElementById(id).classList.add('hidden'));});
 
-// ── Init ──────────────────────────────────────────────────────────────────────
-apiKey=localStorage.getItem(K.apiKey)||'';
+// ── INIT ──────────────────────────────────────────────────────────────────────
 const sess=g(K.session);
-if(sess&&CREDS[sess]){currentUser=sess;document.getElementById('loginView').classList.add('hidden');document.getElementById('appView').classList.remove('hidden');document.getElementById('sidebarUser').textContent=sess;showView('dashboard');}
+const loginPass = document.getElementById('loginPass');
+// fix id mismatch
+document.getElementById('loginPass') || console.warn('loginPass not found');
+
+if(sess&&CREDS[sess]){
+  currentUser=sess;
+  document.getElementById('loginView').classList.add('hidden');
+  document.getElementById('appView').classList.remove('hidden');
+  document.getElementById('sidebarUser').textContent='Logged in as '+sess;
+  const apiKey=localStorage.getItem(K.apiKey)||'';
+  if(!apiKey)document.getElementById('apiWarnBanner').classList.remove('hidden');
+  showView('dashboard');
+}
 </script>
 </body>
 </html>
